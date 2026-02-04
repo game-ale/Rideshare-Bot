@@ -101,9 +101,9 @@ cat .env.example
 ## 🚨 Sensitive Data in Your .env (DO NOT COMMIT)
 
 Your `.env` file contains:
-- 🔒 **BOT_TOKEN**: `8209886585:AAH0CCjctWSYwTPkF_nqEYS0Mv7Pk52n6Pw`
-- 🔒 **ADMIN_IDS**: `7820303292`
-- 🔒 **WEBHOOK_URL**: `https://rideshare-bot-production.up.railway.app`
+- 🔒 **BOT_TOKEN**: `1234567890:ABCdefGHIjklMNOpqrsTUVwxyz` (example)
+- 🔒 **ADMIN_IDS**: `123456789` (example)
+- 🔒 **WEBHOOK_URL**: Your Railway/Render deployment URL
 
 **These MUST stay in `.env` only!**
 
