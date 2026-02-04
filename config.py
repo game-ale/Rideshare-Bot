@@ -26,10 +26,18 @@ IS_PRODUCTION = ENVIRONMENT == "production"
 WEBHOOK_URL = os.getenv("WEBHOOK_URL", "")
 WEBHOOK_PATH = os.getenv("WEBHOOK_PATH", "/webhook")
 WEBAPP_HOST = os.getenv("WEBAPP_HOST", "0.0.0.0")
-WEBAPP_PORT = int(os.getenv("WEBAPP_PORT", "8000"))
+
+# Railway sets PORT environment variable automatically
+WEBAPP_PORT = int(os.getenv("PORT", os.getenv("WEBAPP_PORT", "8000")))
 
 # Database Configuration
+# Railway provides DATABASE_URL starting with postgres://
+# We need it to be postgresql+asyncpg:// for SQLAlchemy async
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./rideshare.db")
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+asyncpg://", 1)
+elif DATABASE_URL.startswith("postgresql://"):
+    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://", 1)
 
 # Logging Configuration
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
