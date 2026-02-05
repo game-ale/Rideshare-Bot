@@ -38,6 +38,18 @@ def main():
     setup_rider_handlers(application)
     setup_admin_handlers(application)
     
+    # Add error handler
+    async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
+        logger.error("Exception while handling an update:", exc_info=context.error)
+        if isinstance(update, Update) and update.effective_message:
+            await update.effective_message.reply_text(
+                "❌ <b>An internal error occurred.</b>\n"
+                "The development team has been notified. Please try again later.",
+                parse_mode="HTML"
+            )
+
+    application.add_error_handler(error_handler)
+    
     logger.info("All handlers registered")
     
     # Run bot

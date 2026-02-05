@@ -26,9 +26,16 @@ async_session_maker = async_sessionmaker(engine, class_=AsyncSession, expire_on_
 
 async def init_db():
     """Initialize database tables."""
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-    logger.info("Database initialized successfully")
+    try:
+        logger.info(f"Initializing database at {DATABASE_URL.split('@')[-1] if '@' in DATABASE_URL else DATABASE_URL}")
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        logger.info("Database initialized successfully")
+    except Exception as e:
+        logger.error(f"Failed to initialize database: {e}", exc_info=True)
+        # Don't re-raise if you want the bot to keep running to show error messages
+        # but in production, we might want it to crash to trigger restart
+        raise
 
 
 @asynccontextmanager
