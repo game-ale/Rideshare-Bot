@@ -5,7 +5,7 @@ Defines the schema for drivers, riders, and rides with proper relationships.
 Note: FSM manages interaction flow, while the database is the single source of truth for ride state.
 """
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime, ForeignKey, Enum as SQLEnum
+from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime, ForeignKey, Enum as SQLEnum, BigInteger
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from enums import RideStatus, VehicleType
@@ -17,7 +17,7 @@ class Driver(Base):
     """Driver model - stores driver information and availability."""
     __tablename__ = "drivers"
     
-    id = Column(Integer, primary_key=True)  # Telegram user ID
+    id = Column(BigInteger, primary_key=True)  # Telegram user ID
     name = Column(String(50), nullable=False)
     vehicle_type = Column(SQLEnum(VehicleType), nullable=False)
     available = Column(Boolean, default=False)
@@ -38,7 +38,7 @@ class Rider(Base):
     """Rider model - stores rider information."""
     __tablename__ = "riders"
     
-    id = Column(Integer, primary_key=True)  # Telegram user ID
+    id = Column(BigInteger, primary_key=True)  # Telegram user ID
     name = Column(String(50), nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     
@@ -58,8 +58,8 @@ class Ride(Base):
     __tablename__ = "rides"
     
     id = Column(Integer, primary_key=True, autoincrement=True)
-    rider_id = Column(Integer, ForeignKey("riders.id"), nullable=False)
-    driver_id = Column(Integer, ForeignKey("drivers.id"), nullable=True)  # Null until assigned
+    rider_id = Column(BigInteger, ForeignKey("riders.id"), nullable=False)
+    driver_id = Column(BigInteger, ForeignKey("drivers.id"), nullable=True)  # Null until assigned
     status = Column(SQLEnum(RideStatus), nullable=False, default=RideStatus.REQUESTED)
     rider_lat = Column(Float, nullable=False)  # Pickup location
     rider_lng = Column(Float, nullable=False)
