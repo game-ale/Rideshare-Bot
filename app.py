@@ -8,7 +8,8 @@ Author: Portfolio Project
 License: MIT
 """
 import asyncio
-from telegram.ext import Application
+from telegram import Update
+from telegram.ext import Application, ContextTypes
 
 from config import BOT_TOKEN, IS_PRODUCTION, WEBHOOK_URL, WEBHOOK_PATH, WEBAPP_HOST, WEBAPP_PORT
 from database.db import init_db
