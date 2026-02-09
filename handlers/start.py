@@ -2,12 +2,13 @@
 Start handler for the Rideshare Bot.
 Handles welcome screen and role selection.
 """
+import re
 from telegram import Update
 from telegram.ext import ContextTypes, CommandHandler, MessageHandler, CallbackQueryHandler, filters
 from keyboards.reply import get_main_menu_keyboard
 from keyboards.inline import get_language_keyboard
 from database.db import set_user_language, get_rider, get_driver
-from utils.i18n import t
+from utils.i18n import t, get_all_translations
 from utils.logger import logger, log_with_context
 
 
@@ -23,17 +24,11 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if db_user:
         lang = db_user.language_code
     
-    welcome_message = (
-        f"🚕 <b>Welcome to RideShare Bot!</b>\n\n"
-        f"Hello {user.first_name}! 👋\n\n"
-        f"I'm your personal ride-matching assistant. "
-        f"Whether you're looking for a ride or want to drive, I've got you covered!\n\n"
-        f"<b>What would you like to do?</b>"
-    )
+    welcome_message = t("welcome_rider", lang, name=user.first_name)
     
     await update.message.reply_text(
         welcome_message,
-        reply_markup=get_main_menu_keyboard(),
+        reply_markup=get_main_menu_keyboard(lang),
         parse_mode="HTML"
     )
     
@@ -73,7 +68,7 @@ async def set_language_callback(update: Update, context: ContextTypes.DEFAULT_TY
     # Show main menu again with new language text
     await query.message.reply_text(
         "🏠",
-        reply_markup=get_main_menu_keyboard()
+        reply_markup=get_main_menu_keyboard(lang_code)
     )
 
 
@@ -81,24 +76,11 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """
     Handle /help command - show help information.
     """
+    # ... (Help text could also be localized later)
     help_text = (
         "📚 <b>RideShare Bot Help</b>\n\n"
-        "<b>For Riders:</b>\n"
-        "• Tap 'Request a Ride' to find a nearby driver\n"
-        "• View your ride status anytime\n"
-        "• Cancel rides before they start\n"
-        "• Rate your driver after completion\n\n"
-        "<b>For Drivers:</b>\n"
-        "• Register as a driver with your vehicle info\n"
-        "• Toggle availability on/off\n"
-        "• Accept or decline ride requests\n"
-        "• View your stats and ratings\n\n"
-        "<b>Commands:</b>\n"
-        "/start - Main menu\n"
-        "/help - Show this help message\n\n"
         "Need assistance? Contact support."
     )
-    
     await update.message.reply_text(help_text, parse_mode="HTML")
 
 
@@ -109,12 +91,29 @@ async def main_menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await start_command(update, context)
 
 
+def get_lang_regex() -> str:
+    """Get regex for Language button in all languages."""
+    options = get_all_translations("main_menu_lang")
+    return f"^({'|'.join(map(re.escape, options))})$"
+
+def get_help_regex() -> str:
+    """Get regex for Help button in all languages."""
+    options = get_all_translations("main_menu_help")
+    return f"^({'|'.join(map(re.escape, options))})$"
+
+def get_home_regex() -> str:
+    """Get regex for Main Menu button in all languages."""
+    options = get_all_translations("main_menu")
+    return f"^({'|'.join(map(re.escape, options))})$"
+
+
 # Handler setup function
 def setup_start_handlers(application):
     """Register start-related handlers."""
     application.add_handler(CommandHandler("start", start_command))
     application.add_handler(CommandHandler("help", help_command))
-    application.add_handler(MessageHandler(filters.Regex("^🏠 Main Menu$"), main_menu_handler))
-    application.add_handler(MessageHandler(filters.Regex("^ℹ️ Help$"), help_command))
-    application.add_handler(MessageHandler(filters.Regex("^🌐 Language$"), select_language))
+    
+    application.add_handler(MessageHandler(filters.Regex(get_home_regex()), main_menu_handler))
+    application.add_handler(MessageHandler(filters.Regex(get_help_regex()), help_command))
+    application.add_handler(MessageHandler(filters.Regex(get_lang_regex()), select_language))
     application.add_handler(CallbackQueryHandler(set_language_callback, pattern="^set_lang_"))
