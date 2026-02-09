@@ -9,7 +9,7 @@ from typing import Optional, List
 from datetime import datetime
 
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-from sqlalchemy import select, and_, or_
+from sqlalchemy import select, and_, or_, text, inspect
 from sqlalchemy.orm import selectinload
 
 from config import DATABASE_URL
@@ -25,16 +25,30 @@ async_session_maker = async_sessionmaker(engine, class_=AsyncSession, expire_on_
 
 
 async def init_db():
-    """Initialize database tables."""
+    """Initialize database tables and handle simple migrations."""
     try:
         logger.info(f"Initializing database at {DATABASE_URL.split('@')[-1] if '@' in DATABASE_URL else DATABASE_URL}")
         async with engine.begin() as conn:
+            # Create tables if they don't exist
             await conn.run_sync(Base.metadata.create_all)
+            
+            # Simple migration check for language_code
+            def migrate_schema(sync_conn):
+                inspector = inspect(sync_conn)
+                
+                for table in ['drivers', 'riders']:
+                    # Ensure table exists before inspecting columns
+                    if table in inspector.get_table_names():
+                        columns = [c['name'] for c in inspector.get_columns(table)]
+                        if 'language_code' not in columns:
+                            logger.info(f"💾 Migrating {table}: adding language_code column")
+                            sync_conn.execute(text(f"ALTER TABLE {table} ADD COLUMN language_code VARCHAR(5) DEFAULT 'en'"))
+            
+            await conn.run_sync(migrate_schema)
+            
         logger.info("Database initialized successfully")
     except Exception as e:
         logger.error(f"Failed to initialize database: {e}", exc_info=True)
-        # Don't re-raise if you want the bot to keep running to show error messages
-        # but in production, we might want it to crash to trigger restart
         raise
 
 
