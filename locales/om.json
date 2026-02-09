@@ -1,6 +1,6 @@
 {
-    "welcome_rider": "👋 Bagatti nagaan dhufte, {name}!\n\nImala gaafachuuf qophiidhaa? Mallattoo armaan gadii cuqaasi!",
-    "welcome_driver": "👋 Bagatti nagaan deebite, {name}!\n\n🚗 Konkolaataa: {vehicle}\n⭐ Sadarkaa: {rating}\nHaala: {status}",
+    "welcome_rider": "👋 Bagatti nagaan dhuftan, {name}!\n\nImala gaafachuuf qophiidhaa? Mallattoo armaan gadii cuqaasi!",
+    "welcome_driver": "👋 Bagatti nagaan deebitaan, {name}!\n\n🚗 Konkolaataa: {vehicle}\n⭐ Sadarkaa: {rating}\nHaala: {status}",
     "main_menu_driver": "🚗 Ani Konkolaachisaadha",
     "main_menu_rider": "👤 Imala nan Gaafadha",
     "main_menu_help": "ℹ️ Gargaarsa",
