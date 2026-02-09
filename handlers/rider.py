@@ -64,9 +64,13 @@ async def rider_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # ==================== Ride Request Flow ====================
 
-async def request_ride(update: Update, context: ContextTypes.DEFAULT_TYPE):
+# ==================== Ride Request Flow (Conversation) ====================
+
+WAITING_LOCATION = 1
+
+async def request_ride_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """
-    Handle ride request from rider.
+    Handle ride request from rider - Ask for location.
     """
     user = update.effective_user
     
@@ -78,19 +82,58 @@ async def request_ride(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"Status: {active_ride.status.value}\n\n"
             "Please complete or cancel your current ride before requesting a new one."
         )
-        return
+        return ConversationHandler.END
     
-    # Generate random pickup location
-    rider_lat, rider_lng = generate_random_location()
+    await update.message.reply_text(
+        "📍 <b>Where should we pick you up?</b>\n\n"
+        "Please tap the button below to share your current location.",
+        reply_markup=get_location_keyboard(),
+        parse_mode="HTML"
+    )
+    return WAITING_LOCATION
+
+
+async def handle_location(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+    Process the shared location and find a driver.
+    """
+    user = update.effective_user
+    location = update.message.location
+    
+    if not location:
+        await update.message.reply_text(
+            "❌ Please use the button below to share your location.",
+            reply_markup=get_location_keyboard()
+        )
+        return WAITING_LOCATION
+    
+    rider_lat = location.latitude
+    rider_lng = location.longitude
     
     # Create ride request
     ride = await create_ride(user.id, rider_lat, rider_lng)
     
+    # Map integration
+    from services.location import get_google_maps_link, get_static_map_url
+    map_link = get_google_maps_link(rider_lat, rider_lng)
+    static_map = get_static_map_url(rider_lat, rider_lng)
+    
     await update.message.reply_text(
         "🔍 <b>Searching for nearby drivers...</b>\n\n"
-        f"📍 Pickup: {get_location_display(rider_lat, rider_lng)}",
-        parse_mode="HTML"
+        f"📍 Pickup: <a href='{map_link}'>{get_location_display(rider_lat, rider_lng)}</a>",
+        parse_mode="HTML",
+        disable_web_page_preview=False
     )
+    
+    # Optionally send a static map image
+    try:
+        await context.bot.send_photo(
+            chat_id=user.id,
+            photo=static_map,
+            caption="📍 Your pickup location"
+        )
+    except Exception as e:
+        logger.warning(f"Failed to send static map: {e}")
     
     # Find nearest driver
     result = await find_nearest_driver(rider_lat, rider_lng, ride.id)
@@ -104,10 +147,8 @@ async def request_ride(update: Update, context: ContextTypes.DEFAULT_TYPE):
             reply_markup=get_rider_menu_keyboard(False),
             parse_mode="HTML"
         )
-        
-        # Cancel the ride
         await cancel_ride(ride.id)
-        return
+        return ConversationHandler.END
     
     driver, distance = result
     
@@ -121,7 +162,7 @@ async def request_ride(update: Update, context: ContextTypes.DEFAULT_TYPE):
             reply_markup=get_rider_menu_keyboard(False),
             parse_mode="HTML"
         )
-        return
+        return ConversationHandler.END
     
     # Notify rider
     await notify_driver_assigned(
@@ -129,8 +170,8 @@ async def request_ride(update: Update, context: ContextTypes.DEFAULT_TYPE):
         driver.vehicle_type.value, distance, ride.id
     )
     
-    # Notify driver with confirmation buttons
-    pickup_location = get_location_display(rider_lat, rider_lng)
+    # Notify driver with confirmation buttons & Map
+    pickup_location = f"<a href='{map_link}'>{get_location_display(rider_lat, rider_lng)}</a>"
     rider = await get_rider(user.id)
     
     await context.bot.send_message(
@@ -149,14 +190,25 @@ async def request_ride(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Update rider menu
     await update.message.reply_text(
         "✅ <b>Driver Assigned!</b>\n\n"
-        f"Waiting for driver confirmation...",
+        "Waiting for driver confirmation...",
         reply_markup=get_rider_menu_keyboard(True),
         parse_mode="HTML"
     )
     
     log_with_context(logger, "INFO", 
-                    f"Ride requested and driver {driver.name} assigned", 
+                    f"Ride requested with REAL GPS and driver {driver.name} assigned", 
                     ride_id=ride.id, user_id=user.id)
+    
+    return ConversationHandler.END
+
+
+async def cancel_request(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Cancel the ride request conversation."""
+    await update.message.reply_text(
+        "❌ Ride request cancelled.",
+        reply_markup=get_rider_menu_keyboard(False)
+    )
+    return ConversationHandler.END
 
 
 # ==================== Ride Status ====================
@@ -174,11 +226,15 @@ async def ride_status(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
     
+    from services.location import get_google_maps_link
+    map_link = get_google_maps_link(active_ride.rider_lat, active_ride.rider_lng)
+    
     # Build status message
     status_msg = (
         f"📍 <b>Ride Status</b>\n\n"
         f"🆔 Ride ID: {active_ride.id}\n"
         f"📊 Status: {active_ride.status.value}\n"
+        f"📍 Pickup: <a href='{map_link}'>View on Map</a>\n"
     )
     
     if active_ride.driver:
@@ -311,12 +367,26 @@ async def rate_ride_callback(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 def setup_rider_handlers(application):
     """Register rider-related handlers."""
+    from keyboards.reply import get_location_keyboard
     
     # Rider menu entry
     application.add_handler(MessageHandler(filters.Regex("^👤 Request a Ride$"), rider_start))
     
+    # Ride Request Conversation
+    ride_conv = ConversationHandler(
+        entry_points=[MessageHandler(filters.Regex("^🚕 Request Ride$"), request_ride_start)],
+        states={
+            WAITING_LOCATION: [
+                MessageHandler(filters.LOCATION, handle_location),
+                MessageHandler(filters.Regex("^❌ Cancel Request$"), cancel_request)
+            ]
+        },
+        fallbacks=[MessageHandler(filters.Regex("^🏠 Main Menu$"), cancel_request)],
+        allow_reentry=True
+    )
+    application.add_handler(ride_conv)
+    
     # Ride actions
-    application.add_handler(MessageHandler(filters.Regex("^🚕 Request Ride$"), request_ride))
     application.add_handler(MessageHandler(filters.Regex("^📍 Ride Status$"), ride_status))
     application.add_handler(MessageHandler(filters.Regex("^❌ Cancel Ride$"), cancel_ride_button))
     

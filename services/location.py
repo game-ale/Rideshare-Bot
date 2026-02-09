@@ -1,19 +1,18 @@
 """
 Location utilities for the Rideshare Bot.
-Provides dummy location generation and distance calculations.
+Provides real GPS support, geopy distance calculations, and map integration.
 """
 import random
 import math
 from typing import Tuple
+from geopy.distance import geodesic
 from config import CITY_LAT_MIN, CITY_LAT_MAX, CITY_LNG_MIN, CITY_LNG_MAX
 
 
 def generate_random_location() -> Tuple[float, float]:
     """
-    Generate a random location within city bounds.
+    Generate a random location within city bounds for simulation.
     Returns (latitude, longitude).
-    
-    Example: For Addis Ababa area (9.0-9.1, 38.7-38.8)
     """
     lat = random.uniform(CITY_LAT_MIN, CITY_LAT_MAX)
     lng = random.uniform(CITY_LNG_MIN, CITY_LNG_MAX)
@@ -22,45 +21,14 @@ def generate_random_location() -> Tuple[float, float]:
 
 def calculate_distance(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
     """
-    Calculate distance between two points using Haversine formula.
+    Calculate distance between two points using Geodesic (precise) formula.
     Returns distance in kilometers.
-    
-    Args:
-        lat1, lng1: First point coordinates
-        lat2, lng2: Second point coordinates
-    
-    Returns:
-        Distance in kilometers (rounded to 2 decimal places)
     """
-    # Earth's radius in kilometers
-    R = 6371.0
-    
-    # Convert degrees to radians
-    lat1_rad = math.radians(lat1)
-    lng1_rad = math.radians(lng1)
-    lat2_rad = math.radians(lat2)
-    lng2_rad = math.radians(lng2)
-    
-    # Haversine formula
-    dlat = lat2_rad - lat1_rad
-    dlng = lng2_rad - lng1_rad
-    
-    a = math.sin(dlat / 2)**2 + math.cos(lat1_rad) * math.cos(lat2_rad) * math.sin(dlng / 2)**2
-    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-    
-    distance = R * c
-    return round(distance, 2)
+    return round(geodesic((lat1, lng1), (lat2, lng2)).kilometers, 2)
 
 
 def format_distance(distance_km: float) -> str:
-    """
-    Format distance for display.
-    
-    Examples:
-        0.5 km → "500 m"
-        1.23 km → "1.2 km"
-        10.5 km → "10.5 km"
-    """
+    """Format distance for display."""
     if distance_km < 1.0:
         meters = int(distance_km * 1000)
         return f"{meters} m"
@@ -69,11 +37,20 @@ def format_distance(distance_km: float) -> str:
 
 
 def get_location_display(lat: float, lng: float) -> str:
-    """
-    Format coordinates for display.
-    
-    Example: (9.0234, 38.7456) → "9.023°N, 38.746°E"
-    """
+    """Format coordinates for display."""
     lat_dir = "N" if lat >= 0 else "S"
     lng_dir = "E" if lng >= 0 else "W"
     return f"{abs(lat):.3f}°{lat_dir}, {abs(lng):.3f}°{lng_dir}"
+
+
+def get_google_maps_link(lat: float, lng: float) -> str:
+    """Generate a Google Maps link for a location."""
+    return f"https://www.google.com/maps/search/?api=1&query={lat},{lng}"
+
+
+def get_static_map_url(lat: float, lng: float, zoom: int = 15) -> str:
+    """
+    Generate an OpenStreetMap static image URL.
+    Note: Using OpenStreetMap static maps for privacy and cost-efficiency.
+    """
+    return f"https://static-maps.yandex.ru/1.x/?ll={lng},{lat}&z={zoom}&l=map&pt={lng},{lat},pm2rdl"

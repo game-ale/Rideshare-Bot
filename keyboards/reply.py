@@ -111,6 +111,21 @@ def get_admin_menu_keyboard() -> ReplyKeyboardMarkup:
     return ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
 
 
+def get_location_keyboard() -> ReplyKeyboardMarkup:
+    """
+    Keyboard that requests the user's location.
+    
+    Layout:
+    [ 📍 Share My Location ]
+    [ ❌ Cancel Request ]
+    """
+    keyboard = [
+        [KeyboardButton("📍 Share My Location", request_location=True)],
+        [KeyboardButton("❌ Cancel Request")]
+    ]
+    return ReplyKeyboardMarkup(keyboard, resize_keyboard=True, one_time_keyboard=True)
+
+
 def remove_keyboard() -> ReplyKeyboardRemove:
     """Remove the current keyboard."""
     return ReplyKeyboardRemove()

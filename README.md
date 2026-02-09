@@ -176,15 +176,6 @@ How was your ride?
 
 ### Local Development
 
-1. **Clone the repository**
-   ```bash
-   git clone <your-repo-url>
-   cd Rideshare-Bot
-   ```
-
-2. **Create virtual environment**
-   ```bash
-   python -m venv venv
    
    # Windows
    venv\Scripts\activate
@@ -198,75 +189,11 @@ How was your ride?
    pip install -r requirements.txt
    ```
 
-4. **Configure environment variables**
-   ```bash
-   # Copy example env file
-   cp .env.example .env
-   
-   # Edit .env and add your bot token
-   # BOT_TOKEN=your_bot_token_here
-   ```
-
-5. **Run the bot**
-   ```bash
-   python app.py
-   ```
-
 The bot will start in development mode with long polling. Open Telegram and send `/start` to your bot!
 
 ### Database Migration (SQLite → PostgreSQL)
 
-To use PostgreSQL instead of SQLite:
 
-1. **Update DATABASE_URL in .env:**
-   ```
-   DATABASE_URL=postgresql+asyncpg://user:password@host:port/dbname
-   ```
-
-2. **Install asyncpg:**
-   ```bash
-   pip install asyncpg
-   ```
-
-3. **Restart the bot** - tables will be created automatically
-
-## 🌐 Deployment
-
-### Railway Deployment
-
-1. **Create Railway account** at [railway.app](https://railway.app)
-
-2. **Create new project** and add PostgreSQL database
-
-3. **Set environment variables:**
-   ```
-   BOT_TOKEN=your_bot_token
-   ENVIRONMENT=production
-   WEBHOOK_URL=https://your-app.railway.app
-   DATABASE_URL=<provided by Railway>
-   ADMIN_IDS=your_telegram_user_id
-   ```
-
-4. **Deploy:**
-   ```bash
-   # Connect to Railway
-   railway login
-   
-   # Deploy
-   railway up
-   ```
-
-5. **Verify webhook:**
-   ```bash
-   curl https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getWebhookInfo
-   ```
-
-### Alternative: Render Deployment
-
-1. Create new Web Service on [render.com](https://render.com)
-2. Connect your GitHub repository
-3. Set environment variables (same as Railway)
-4. Deploy!
 
 ## 📸 Screenshots
 
@@ -318,5 +245,3 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 For questions or feedback, reach out via [your contact method].
 
 ---
-
-**Built with ❤️ as a portfolio project to demonstrate production-ready bot development**
