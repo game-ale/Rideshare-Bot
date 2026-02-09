@@ -1,0 +1,20 @@
+{
+    "welcome_rider": "👋 Welcome, {name}!\n\nReady to request a ride? Tap the button below!",
+    "welcome_driver": "👋 Welcome back, {name}!\n\n🚗 Vehicle: {vehicle}\n⭐ Rating: {rating}\nStatus: {status}",
+    "main_menu_driver": "🚗 I'm a Driver",
+    "main_menu_rider": "👤 Request a Ride",
+    "main_menu_help": "ℹ️ Help",
+    "main_menu_lang": "🌐 Language",
+    "request_ride": "🚕 Request Ride",
+    "go_available": "✅ Go Available",
+    "go_offline": "❌ Go Offline",
+    "my_stats": "📊 My Stats",
+    "main_menu": "🏠 Main Menu",
+    "searching_driver": "🔍 <b>Searching for nearby drivers...</b>\n\n📍 Pickup: {location}",
+    "no_drivers": "😔 <b>No Drivers Available</b>\n\nSorry, there are no drivers nearby at the moment.\nPlease try again later!",
+    "driver_assigned": "✅ <b>Driver Assigned!</b>\n\nWaiting for driver confirmation...",
+    "ride_accepted": "✅ <b>Ride Accepted!</b>\n\nRide is now in progress.",
+    "ride_completed": "✅ <b>Ride Completed!</b>\n\nGreat job!",
+    "select_language": "🌐 <b>Select Language / Qooqa Filadhu / ቋንቋ ይምረጡ</b>",
+    "lang_updated": "✅ Language updated to English!"
+}

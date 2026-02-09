@@ -32,14 +32,17 @@ async def driver_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Start driver registration or show menu."""
     user = update.effective_user
     driver = await get_driver(user.id)
+    lang = driver.language_code if driver else "en"
     
     if driver:
         await update.message.reply_text(
-            f"👋 Welcome back, {driver.name}!\n\n"
-            f"🚗 Vehicle: {driver.vehicle_type.value}\n"
-            f"⭐ Rating: {driver.rating:.1f}\n"
-            f"Status: {'✅ AVAILABLE' if driver.available else '❌ OFFLINE'}",
-            reply_markup=get_driver_menu_keyboard(driver.available)
+            t("welcome_driver", lang, 
+              name=driver.name, 
+              vehicle=driver.vehicle_type.value, 
+              rating=f"{driver.rating:.1f}", 
+              status="✅ AVAILABLE" if driver.available else "❌ OFFLINE"),
+            reply_markup=get_driver_menu_keyboard(driver.available),
+            parse_mode="HTML"
         )
         return ConversationHandler.END
     

@@ -24,6 +24,7 @@ from services.matching import find_nearest_driver
 from services.notifications import notify_driver_assigned, notify_rider_assigned, notify_ride_cancelled
 from utils.logger import logger, log_with_context
 from utils.validators import validate_name
+from utils.i18n import t, _translations
 
 
 # ==================== Rider Registration & Menu ====================
@@ -41,20 +42,13 @@ async def rider_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         rider = await create_rider(user.id, name)
         log_with_context(logger, "INFO", f"Rider {name} auto-registered", user_id=user.id)
     
+    lang = rider.language_code
+    
     # Check for active ride
     active_ride = await get_active_ride_for_user(user.id)
     has_active_ride = active_ride is not None
     
-    welcome_msg = f"👋 Welcome, {rider.name}!\n\n"
-    
-    if has_active_ride:
-        welcome_msg += (
-            f"📍 You have an active ride (ID: {active_ride.id})\n"
-            f"Status: {active_ride.status.value}\n\n"
-            "Use the buttons below to check status or cancel."
-        )
-    else:
-        welcome_msg += "Ready to request a ride? Tap the button below!"
+    welcome_msg = t("welcome_rider", lang, name=rider.name)
     
     await update.message.reply_text(
         welcome_msg,
@@ -73,20 +67,19 @@ async def request_ride_start(update: Update, context: ContextTypes.DEFAULT_TYPE)
     Handle ride request from rider - Ask for location.
     """
     user = update.effective_user
+    rider = await get_rider(user.id)
+    lang = rider.language_code if rider else "en"
     
     # Check if rider already has an active ride
     active_ride = await get_active_ride_for_user(user.id)
     if active_ride:
         await update.message.reply_text(
-            f"❌ You already have an active ride (ID: {active_ride.id})!\n\n"
-            f"Status: {active_ride.status.value}\n\n"
-            "Please complete or cancel your current ride before requesting a new one."
+            f"❌ You already have an active ride (ID: {active_ride.id})!"
         )
         return ConversationHandler.END
     
     await update.message.reply_text(
-        "📍 <b>Where should we pick you up?</b>\n\n"
-        "Please tap the button below to share your current location.",
+        t("select_location", lang) if "select_location" in _translations[lang] else "📍 <b>Where should we pick you up?</b>",
         reply_markup=get_location_keyboard(),
         parse_mode="HTML"
     )
@@ -98,6 +91,8 @@ async def handle_location(update: Update, context: ContextTypes.DEFAULT_TYPE):
     Process the shared location and find a driver.
     """
     user = update.effective_user
+    rider = await get_rider(user.id)
+    lang = rider.language_code if rider else "en"
     location = update.message.location
     
     if not location:
@@ -119,8 +114,7 @@ async def handle_location(update: Update, context: ContextTypes.DEFAULT_TYPE):
     static_map = get_static_map_url(rider_lat, rider_lng)
     
     await update.message.reply_text(
-        "🔍 <b>Searching for nearby drivers...</b>\n\n"
-        f"📍 Pickup: <a href='{map_link}'>{get_location_display(rider_lat, rider_lng)}</a>",
+        t("searching_driver", lang, location=f"<a href='{map_link}'>{get_location_display(rider_lat, rider_lng)}</a>"),
         parse_mode="HTML",
         disable_web_page_preview=False
     )

@@ -1,0 +1,20 @@
+{
+    "welcome_rider": "👋 እንኳን ደህና መጡ፣ {name}!\n\nጉዞ ለመጠየቅ ዝግጁ ነዎት? ከታች ያለውን ቁልፍ ይጫኑ!",
+    "welcome_driver": "👋 እንኳን ደህና መጡ፣ {name}!\n\n🚗 ተሽከርካሪ: {vehicle}\n⭐ ደረጃ: {rating}\nሁኔታ: {status}",
+    "main_menu_driver": "🚗 እኔ ሹፌር ነኝ",
+    "main_menu_rider": "👤 ጉዞ እፈልጋለሁ",
+    "main_menu_help": "ℹ️ እርዳታ",
+    "main_menu_lang": "🌐 ቋንቋ",
+    "request_ride": "🚕 ጉዞ ጠይቅ",
+    "go_available": "✅ ስራ ጀምር",
+    "go_offline": "❌ ስራ አቁም",
+    "my_stats": "📊 የእኔ መረጃ",
+    "main_menu": "🏠 ዋና ማውጫ",
+    "searching_driver": "🔍 <b>ሹፌር እየፈለግን ነው...</b>\n\n📍 መነሻ: {location}",
+    "no_drivers": "😔 <b>ምንም ሹፌር አልተገኘም</b>\n\nይቅርታ፣ በአሁኑ ሰዓት በአቅራቢያዎ ምንም ሹፌር የለም።\nእባክዎ ቆይተው እንደገና ይሞክሩ!",
+    "driver_assigned": "✅ <b>ሹፌር ተገኝቷል!</b>\n\nሹፌሩ እስኪያረጋግጥ ድረስ ይጠብቁ...",
+    "ride_accepted": "✅ <b>የጉዞ ጥያቄ ተቀባይነት አግኝቷል!</b>\n\nጉዞው ተጀምሯል።",
+    "ride_completed": "✅ <b>ጉዞው ተጠናቋል!</b>\n\nበጣም ጥሩ!",
+    "select_language": "🌐 <b>Select Language / Qooqa Filadhu / ቋንቋ ይምረጡ</b>",
+    "lang_updated": "✅ ቋንቋ ወደ አማርኛ ተቀይሯል!"
+}

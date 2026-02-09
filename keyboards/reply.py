@@ -18,7 +18,10 @@ def get_main_menu_keyboard() -> ReplyKeyboardMarkup:
             KeyboardButton("🚗 I'm a Driver"),
             KeyboardButton("👤 Request a Ride")
         ],
-        [KeyboardButton("ℹ️ Help")]
+        [
+            KeyboardButton("🌐 Language"),
+            KeyboardButton("ℹ️ Help")
+        ]
     ]
     return ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
 
