@@ -3,81 +3,59 @@ Reply keyboards for the Rideshare Bot.
 Provides persistent button menus for user navigation.
 """
 from telegram import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
+from utils.i18n import t
 
 
-def get_main_menu_keyboard() -> ReplyKeyboardMarkup:
+def get_main_menu_keyboard(lang: str = "en") -> ReplyKeyboardMarkup:
     """
     Main menu keyboard shown after /start.
-    
-    Layout:
-    [ 🚗 I'm a Driver ] [ 👤 Request a Ride ]
-    [ ℹ️ Help ]
     """
     keyboard = [
         [
-            KeyboardButton("🚗 I'm a Driver"),
-            KeyboardButton("👤 Request a Ride")
+            KeyboardButton(t("main_menu_driver", lang)),
+            KeyboardButton(t("main_menu_rider", lang))
         ],
         [
-            KeyboardButton("🌐 Language"),
-            KeyboardButton("ℹ️ Help")
+            KeyboardButton(t("main_menu_lang", lang)),
+            KeyboardButton(t("main_menu_help", lang))
         ]
     ]
     return ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
 
 
-def get_driver_menu_keyboard(is_available: bool = False) -> ReplyKeyboardMarkup:
+def get_driver_menu_keyboard(is_available: bool = False, lang: str = "en") -> ReplyKeyboardMarkup:
     """
     Driver menu keyboard.
-    
-    Layout (when offline):
-    [ ✅ Go Available ]
-    [ 📊 My Stats ]
-    [ 🏠 Main Menu ]
-    
-    Layout (when available):
-    [ ❌ Go Offline ]
-    [ 📊 My Stats ]
-    [ 🏠 Main Menu ]
     """
     if is_available:
         keyboard = [
-            [KeyboardButton("❌ Go Offline")],
-            [KeyboardButton("📊 My Stats")],
-            [KeyboardButton("🏠 Main Menu")]
+            [KeyboardButton(t("go_offline", lang))],
+            [KeyboardButton(t("my_stats", lang))],
+            [KeyboardButton(t("main_menu", lang))]
         ]
     else:
         keyboard = [
-            [KeyboardButton("✅ Go Available")],
-            [KeyboardButton("📊 My Stats")],
-            [KeyboardButton("🏠 Main Menu")]
+            [KeyboardButton(t("go_available", lang))],
+            [KeyboardButton(t("my_stats", lang))],
+            [KeyboardButton(t("main_menu", lang))]
         ]
     return ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
 
 
-def get_rider_menu_keyboard(has_active_ride: bool = False) -> ReplyKeyboardMarkup:
+def get_rider_menu_keyboard(has_active_ride: bool = False, lang: str = "en") -> ReplyKeyboardMarkup:
     """
     Rider menu keyboard.
-    
-    Layout (no active ride):
-    [ 🚕 Request Ride ]
-    [ 🏠 Main Menu ]
-    
-    Layout (with active ride):
-    [ 📍 Ride Status ]
-    [ ❌ Cancel Ride ]
-    [ 🏠 Main Menu ]
     """
     if has_active_ride:
         keyboard = [
-            [KeyboardButton("📍 Ride Status")],
-            [KeyboardButton("❌ Cancel Ride")],
-            [KeyboardButton("🏠 Main Menu")]
+            [KeyboardButton(t("ride_status_btn", lang))],
+            [KeyboardButton(t("cancel_ride_btn", lang))],
+            [KeyboardButton(t("main_menu", lang))]
         ]
     else:
         keyboard = [
-            [KeyboardButton("🚕 Request Ride")],
-            [KeyboardButton("🏠 Main Menu")]
+            [KeyboardButton(t("request_ride", lang))],
+            [KeyboardButton(t("main_menu", lang))]
         ]
     return ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
 
@@ -85,10 +63,7 @@ def get_rider_menu_keyboard(has_active_ride: bool = False) -> ReplyKeyboardMarku
 def get_vehicle_type_keyboard() -> ReplyKeyboardMarkup:
     """
     Vehicle type selection keyboard for driver registration.
-    
-    Layout:
-    [ 🚗 Car ] [ 🏍 Motorcycle ]
-    [ 🚐 Van ] [ 🛵 Bike ]
+    Stay in English for now as these are often recognizable, or we can localize.
     """
     keyboard = [
         [KeyboardButton("🚗 Car"), KeyboardButton("🏍 Motorcycle")],
@@ -97,34 +72,13 @@ def get_vehicle_type_keyboard() -> ReplyKeyboardMarkup:
     return ReplyKeyboardMarkup(keyboard, resize_keyboard=True, one_time_keyboard=True)
 
 
-def get_admin_menu_keyboard() -> ReplyKeyboardMarkup:
-    """
-    Admin panel keyboard.
-    
-    Layout:
-    [ 👥 All Drivers ] [ 🚕 Active Rides ]
-    [ 📊 Statistics ]
-    [ 🏠 Main Menu ]
-    """
-    keyboard = [
-        [KeyboardButton("👥 All Drivers"), KeyboardButton("🚕 Active Rides")],
-        [KeyboardButton("📊 Statistics")],
-        [KeyboardButton("🏠 Main Menu")]
-    ]
-    return ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
-
-
-def get_location_keyboard() -> ReplyKeyboardMarkup:
+def get_location_keyboard(lang: str = "en") -> ReplyKeyboardMarkup:
     """
     Keyboard that requests the user's location.
-    
-    Layout:
-    [ 📍 Share My Location ]
-    [ ❌ Cancel Request ]
     """
     keyboard = [
-        [KeyboardButton("📍 Share My Location", request_location=True)],
-        [KeyboardButton("❌ Cancel Request")]
+        [KeyboardButton(t("share_location_btn", lang), request_location=True)],
+        [KeyboardButton(t("cancel_btn", lang))]
     ]
     return ReplyKeyboardMarkup(keyboard, resize_keyboard=True, one_time_keyboard=True)
 

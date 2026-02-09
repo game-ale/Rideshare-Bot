@@ -16,5 +16,14 @@
     "ride_accepted": "✅ <b>Ride Accepted!</b>\n\nRide is now in progress.",
     "ride_completed": "✅ <b>Ride Completed!</b>\n\nGreat job!",
     "select_language": "🌐 <b>Select Language / Qooqa Filadhu / ቋንቋ ይምረጡ</b>",
-    "lang_updated": "✅ Language updated to English!"
+    "lang_updated": "✅ Language updated to English!",
+    "registration_complete": "✅ <b>Registration Complete!</b>",
+    "select_location": "📍 <b>Where should we pick you up?</b>",
+    "driver_registration_prompt": "🚗 <b>Driver Registration</b>\n\nPlease enter your full name:",
+    "select_vehicle": "Great, {name}! Select your vehicle:",
+    "share_location_prompt": "📍 <b>Where are you based?</b>\n\nShare your location to receive rides nearby.",
+    "share_location_btn": "📍 Share My Location",
+    "cancel_btn": "❌ Cancel",
+    "ride_status_btn": "📍 Ride Status",
+    "cancel_ride_btn": "❌ Cancel Ride"
 }

@@ -2,6 +2,7 @@
 Rider handler for the Rideshare Bot.
 Manages ride requests, status tracking, cancellations, and ratings.
 """
+import re
 from telegram import Update
 from telegram.ext import (
     ContextTypes, ConversationHandler, CommandHandler,
@@ -17,14 +18,14 @@ from fsm.rider_states import (
     RIDER_IDLE, RIDER_REQUESTING_RIDE, RIDER_WAITING_DRIVER,
     RIDER_RIDE_ASSIGNED, RIDER_ONGOING_RIDE, RIDER_RATING_DRIVER
 )
-from keyboards.reply import get_rider_menu_keyboard
+from keyboards.reply import get_rider_menu_keyboard, get_location_keyboard
 from keyboards.inline import get_rating_keyboard, get_ride_confirmation_keyboard
 from services.location import generate_random_location, format_distance, get_location_display
 from services.matching import find_nearest_driver
 from services.notifications import notify_driver_assigned, notify_rider_assigned, notify_ride_cancelled
 from utils.logger import logger, log_with_context
 from utils.validators import validate_name
-from utils.i18n import t, _translations
+from utils.i18n import t, get_all_translations
 
 
 # ==================== Rider Registration & Menu ====================
@@ -52,11 +53,9 @@ async def rider_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     await update.message.reply_text(
         welcome_msg,
-        reply_markup=get_rider_menu_keyboard(has_active_ride)
+        reply_markup=get_rider_menu_keyboard(has_active_ride, lang)
     )
 
-
-# ==================== Ride Request Flow ====================
 
 # ==================== Ride Request Flow (Conversation) ====================
 
@@ -79,8 +78,8 @@ async def request_ride_start(update: Update, context: ContextTypes.DEFAULT_TYPE)
         return ConversationHandler.END
     
     await update.message.reply_text(
-        t("select_location", lang) if "select_location" in _translations[lang] else "📍 <b>Where should we pick you up?</b>",
-        reply_markup=get_location_keyboard(),
+        t("select_location", lang),
+        reply_markup=get_location_keyboard(lang),
         parse_mode="HTML"
     )
     return WAITING_LOCATION
@@ -98,251 +97,109 @@ async def handle_location(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not location:
         await update.message.reply_text(
             "❌ Please use the button below to share your location.",
-            reply_markup=get_location_keyboard()
+            reply_markup=get_location_keyboard(lang)
         )
         return WAITING_LOCATION
-    
-    rider_lat = location.latitude
-    rider_lng = location.longitude
-    
-    # Create ride request
-    ride = await create_ride(user.id, rider_lat, rider_lng)
-    
-    # Map integration
-    from services.location import get_google_maps_link, get_static_map_url
-    map_link = get_google_maps_link(rider_lat, rider_lng)
-    static_map = get_static_map_url(rider_lat, rider_lng)
+
+    # Create ride
+    ride = await create_ride(user.id, location.latitude, location.longitude)
     
     await update.message.reply_text(
-        t("searching_driver", lang, location=f"<a href='{map_link}'>{get_location_display(rider_lat, rider_lng)}</a>"),
-        parse_mode="HTML",
-        disable_web_page_preview=False
-    )
-    
-    # Optionally send a static map image
-    try:
-        await context.bot.send_photo(
-            chat_id=user.id,
-            photo=static_map,
-            caption="📍 Your pickup location"
-        )
-    except Exception as e:
-        logger.warning(f"Failed to send static map: {e}")
-    
-    # Find nearest driver
-    result = await find_nearest_driver(rider_lat, rider_lng, ride.id)
-    
-    if not result:
-        # No drivers available
-        await update.message.reply_text(
-            "😔 <b>No Drivers Available</b>\n\n"
-            "Sorry, there are no drivers nearby at the moment.\n"
-            "Please try again later!",
-            reply_markup=get_rider_menu_keyboard(False),
-            parse_mode="HTML"
-        )
-        await cancel_ride(ride.id)
-        return ConversationHandler.END
-    
-    driver, distance = result
-    
-    # Assign driver to ride atomically
-    success = await assign_driver_to_ride(ride.id, driver.id, distance)
-    
-    if not success:
-        await update.message.reply_text(
-            "😔 <b>Driver No Longer Available</b>\n\n"
-            "The driver was assigned to another ride. Please try again!",
-            reply_markup=get_rider_menu_keyboard(False),
-            parse_mode="HTML"
-        )
-        return ConversationHandler.END
-    
-    # Notify rider
-    await notify_driver_assigned(
-        context.bot, user.id, driver.name,
-        driver.vehicle_type.value, distance, ride.id
-    )
-    
-    # Notify driver with confirmation buttons & Map
-    pickup_location = f"<a href='{map_link}'>{get_location_display(rider_lat, rider_lng)}</a>"
-    rider = await get_rider(user.id)
-    
-    await context.bot.send_message(
-        chat_id=driver.id,
-        text=(
-            "🚕 <b>New Ride Request!</b>\n\n"
-            f"👤 Rider: {rider.name}\n"
-            f"📍 Pickup: {pickup_location}\n"
-            f"🛣 Distance: {format_distance(distance)}\n\n"
-            "Please confirm to accept this ride."
-        ),
-        reply_markup=get_ride_confirmation_keyboard(ride.id),
+        t("searching_driver", lang, location=get_location_display(location.latitude, location.longitude)),
+        reply_markup=get_rider_menu_keyboard(True, lang),
         parse_mode="HTML"
     )
     
-    # Update rider menu
-    await update.message.reply_text(
-        "✅ <b>Driver Assigned!</b>\n\n"
-        "Waiting for driver confirmation...",
-        reply_markup=get_rider_menu_keyboard(True),
-        parse_mode="HTML"
-    )
+    # Matching Logic
+    driver, distance = await find_nearest_driver(location.latitude, location.longitude)
     
-    log_with_context(logger, "INFO", 
-                    f"Ride requested with REAL GPS and driver {driver.name} assigned", 
-                    ride_id=ride.id, user_id=user.id)
+    if not driver:
+        await update.message.reply_text(t("no_drivers", lang), parse_mode="HTML")
+        # In a real app, we'd keep searching or queue it
+        return ConversationHandler.END
+        
+    # Notify rider and driver
+    await assign_driver_to_ride(ride.id, driver.id, distance)
+    await notify_rider_assigned(context.bot, user.id, driver, distance)
+    await notify_driver_assigned(context.bot, driver.id, user, location.latitude, location.longitude, ride.id)
     
     return ConversationHandler.END
 
 
 async def cancel_request(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Cancel the ride request conversation."""
+    """Cancel ride request during conversation."""
+    user_id = update.effective_user.id
+    rider = await get_rider(user_id)
+    lang = rider.language_code if rider else "en"
+    
     await update.message.reply_text(
-        "❌ Ride request cancelled.",
-        reply_markup=get_rider_menu_keyboard(False)
+        "❌ Request cancelled.",
+        reply_markup=get_rider_menu_keyboard(False, lang)
     )
     return ConversationHandler.END
 
 
-# ==================== Ride Status ====================
+# ==================== Ride Management Buttons ====================
 
 async def ride_status(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Show current ride status."""
-    user = update.effective_user
+    """Show status of active ride."""
+    user_id = update.effective_user.id
+    ride = await get_active_ride_for_user(user_id)
     
-    active_ride = await get_active_ride_for_user(user.id)
-    
-    if not active_ride:
-        await update.message.reply_text(
-            "❌ You don't have any active rides.",
-            reply_markup=get_rider_menu_keyboard(False)
-        )
+    if not ride:
+        await update.message.reply_text("❌ No active ride.")
         return
-    
-    from services.location import get_google_maps_link
-    map_link = get_google_maps_link(active_ride.rider_lat, active_ride.rider_lng)
-    
-    # Build status message
-    status_msg = (
-        f"📍 <b>Ride Status</b>\n\n"
-        f"🆔 Ride ID: {active_ride.id}\n"
-        f"📊 Status: {active_ride.status.value}\n"
-        f"📍 Pickup: <a href='{map_link}'>View on Map</a>\n"
+
+    status_text = (
+        f"🚕 <b>Ride Status (ID: {ride.id})</b>\n\n"
+        f"Status: {ride.status.value}\n"
     )
-    
-    if active_ride.driver:
-        status_msg += (
-            f"\n👤 Driver: {active_ride.driver.name}\n"
-            f"🚗 Vehicle: {active_ride.driver.vehicle_type.value}\n"
-            f"⭐ Rating: {active_ride.driver.rating:.1f}\n"
-            f"📏 Distance: {format_distance(active_ride.distance)}"
-        )
-    
-    await update.message.reply_text(status_msg, parse_mode="HTML")
+    if ride.driver:
+        status_text += f"Driver: {ride.driver.name}\nVehicle: {ride.driver.vehicle_type.value}\n"
+        
+    await update.message.reply_text(status_text, parse_mode="HTML")
 
-
-# ==================== Ride Cancellation ====================
 
 async def cancel_ride_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Handle ride cancellation from button."""
-    user = update.effective_user
+    """Handle the 'Cancel Ride' button."""
+    user_id = update.effective_user.id
+    ride = await get_active_ride_for_user(user_id)
     
-    active_ride = await get_active_ride_for_user(user.id)
-    
-    if not active_ride:
-        await update.message.reply_text(
-            "❌ You don't have any active rides to cancel.",
-            reply_markup=get_rider_menu_keyboard(False)
-        )
+    if not ride:
+        await update.message.reply_text("❌ No active ride to cancel.")
         return
-    
-    # Can only cancel before ride starts
-    if active_ride.status == RideStatus.ONGOING:
-        await update.message.reply_text(
-            "❌ Cannot cancel a ride that's already in progress!"
-        )
-        return
-    
-    # Cancel the ride
-    await cancel_ride(active_ride.id)
-    
-    # Notify driver if assigned
-    if active_ride.driver_id:
-        await notify_ride_cancelled(context.bot, user.id, active_ride.id, active_ride.driver_id)
-    
+
     await update.message.reply_text(
-        "✅ <b>Ride Cancelled</b>\n\n"
-        "Your ride has been cancelled successfully.",
-        reply_markup=get_rider_menu_keyboard(False),
-        parse_mode="HTML"
+        f"Are you sure you want to cancel ride {ride.id}?",
+        reply_markup=get_ride_confirmation_keyboard(ride.id)
     )
-    
-    log_with_context(logger, "INFO", "Rider cancelled ride", 
-                    ride_id=active_ride.id, user_id=user.id)
 
 
 async def cancel_ride_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Handle ride cancellation from inline button."""
+    """Handle cancellation confirmation from inline keyboard."""
     query = update.callback_query
     await query.answer()
     
-    user = update.effective_user
     ride_id = int(query.data.split("_")[-1])
-    
     ride = await get_ride(ride_id)
     
-    if not ride or ride.rider_id != user.id:
-        await query.edit_message_text("❌ Invalid ride.")
-        return
-    
-    if ride.status == RideStatus.ONGOING:
-        await query.answer("❌ Cannot cancel a ride in progress!", show_alert=True)
-        return
-    
-    # Cancel the ride
-    await cancel_ride(ride_id)
-    
-    # Notify driver if assigned
-    if ride.driver_id:
-        await notify_ride_cancelled(context.bot, user.id, ride_id, ride.driver_id)
-    
-    await query.edit_message_text(
-        "✅ <b>Ride Cancelled</b>\n\n"
-        "Your ride has been cancelled successfully.",
-        parse_mode="HTML"
-    )
-    
-    log_with_context(logger, "INFO", "Rider cancelled ride via callback", 
-                    ride_id=ride_id, user_id=user.id)
+    if await cancel_ride(ride_id):
+        await query.edit_message_text("❌ Ride cancelled.")
+        if ride and ride.driver_id:
+            await notify_ride_cancelled(context.bot, ride.driver_id, ride_id)
+    else:
+        await query.edit_message_text("❌ Could not cancel ride.")
 
-
-# ==================== Rating System ====================
 
 async def rate_ride_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Handle ride rating from inline keyboard."""
+    """Handle rating callback."""
     query = update.callback_query
     await query.answer()
     
-    user = update.effective_user
+    data = query.data.split("_")
+    rating = int(data[1])
+    ride_id = int(data[2])
     
-    # Parse callback data: rate_{ride_id}_{rating}
-    parts = query.data.split("_")
-    ride_id = int(parts[1])
-    rating = int(parts[2])
-    
-    # Get ride
-    ride = await get_ride(ride_id)
-    
-    if not ride or ride.rider_id != user.id:
-        await query.edit_message_text("❌ Invalid ride.")
-        return
-    
-    if ride.status != RideStatus.COMPLETED:
-        await query.answer("❌ Can only rate completed rides!", show_alert=True)
-        return
-    
-    # Add rating
     await add_ride_rating(ride_id, rating)
     
     stars = "⭐" * rating
@@ -352,30 +209,40 @@ async def rate_ride_callback(update: Update, context: ContextTypes.DEFAULT_TYPE)
         f"Your feedback helps us improve our service!",
         parse_mode="HTML"
     )
-    
-    log_with_context(logger, "INFO", f"Ride rated {rating} stars", 
-                    ride_id=ride_id, user_id=user.id)
+
+
+# ==================== Regex Helpers ====================
+
+def get_rider_start_regex() -> str:
+    options = get_all_translations("main_menu_rider")
+    return f"^({'|'.join(map(re.escape, options))})$"
+
+def get_request_ride_regex() -> str:
+    options = get_all_translations("request_ride")
+    return f"^({'|'.join(map(re.escape, options))})$"
+
+def get_cancel_btn_regex() -> str:
+    options = get_all_translations("cancel_btn")
+    return f"^({'|'.join(map(re.escape, options))})$"
 
 
 # ==================== Handler Setup ====================
 
 def setup_rider_handlers(application):
     """Register rider-related handlers."""
-    from keyboards.reply import get_location_keyboard
-    
     # Rider menu entry
-    application.add_handler(MessageHandler(filters.Regex("^👤 Request a Ride$"), rider_start))
+    application.add_handler(MessageHandler(filters.Regex(get_rider_start_regex()), rider_start))
     
     # Ride Request Conversation
     ride_conv = ConversationHandler(
-        entry_points=[MessageHandler(filters.Regex("^🚕 Request Ride$"), request_ride_start)],
+        entry_points=[MessageHandler(filters.Regex(get_request_ride_regex()), request_ride_start)],
         states={
             WAITING_LOCATION: [
                 MessageHandler(filters.LOCATION, handle_location),
-                MessageHandler(filters.Regex("^❌ Cancel Request$"), cancel_request)
+                MessageHandler(filters.Regex(get_cancel_btn_regex()), cancel_request)
             ]
         },
-        fallbacks=[MessageHandler(filters.Regex("^🏠 Main Menu$"), cancel_request)],
+        fallbacks=[MessageHandler(filters.Regex("^🏠 Main Menu$"), cancel_request)], # Add regex if needed
         allow_reentry=True
     )
     application.add_handler(ride_conv)

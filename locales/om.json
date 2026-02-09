@@ -16,5 +16,14 @@
     "ride_accepted": "✅ <b>Gaaffiin imalaa fudhatameera!</b>\n\nImalli jalqabameera.",
     "ride_completed": "✅ <b>Imalli xumurameera!</b>\n\nHojii gaarii!",
     "select_language": "🌐 <b>Select Language / Qooqa Filadhu / ቋንቋ ይምረጡ</b>",
-    "lang_updated": "✅ Qooqni gara Afaan Oromootti jijjiirameera!"
+    "lang_updated": "✅ Qooqni gara Afaan Oromootti jijjiirameera!",
+    "registration_complete": "✅ <b>Galmeen xumurameera!</b>",
+    "select_location": "📍 <b>Eessaa isin fuunu?</b>",
+    "driver_registration_prompt": "🚗 <b>Galmee Konkolaachisaa</b>\n\nMaaloo maqaa keessan guutuu galchaa:",
+    "select_vehicle": "Baay'ee gaarii {name}! Gosa konkolaataa keessan filadhaa:",
+    "share_location_prompt": "📍 <b>Teessoon keessan eessa?</b>\n\nBakka jirtan nuuf qoodaa.",
+    "share_location_btn": "📍 Bakka nuhun qoodi",
+    "cancel_btn": "❌ Haqameera",
+    "ride_status_btn": "📍 Haala Imalaa",
+    "cancel_ride_btn": "❌ Imala Haqi"
 }

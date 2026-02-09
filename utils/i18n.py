@@ -44,5 +44,17 @@ def t(key: str, lang: str = "en", **kwargs) -> str:
         logger.error(f"Translation error for '{key}': {e}")
         return template
 
+def get_all_translations(key: str) -> list:
+    """Get all translated values for a key across all languages."""
+    values = []
+    for lang in _translations:
+        if key in _translations[lang]:
+            values.append(_translations[lang][key])
+    # Also add English explicitly if not already there (fallback)
+    en_val = _translations.get("en", {}).get(key)
+    if en_val and en_val not in values:
+        values.append(en_val)
+    return list(set(values))
+
 # Initial load
 load_translations()
