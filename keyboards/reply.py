@@ -86,3 +86,15 @@ def get_location_keyboard(lang: str = "en") -> ReplyKeyboardMarkup:
 def remove_keyboard() -> ReplyKeyboardRemove:
     """Remove the current keyboard."""
     return ReplyKeyboardRemove()
+
+
+def get_admin_menu_keyboard() -> ReplyKeyboardMarkup:
+    """
+    Admin panel keyboard. (Stay in English as it's for the owner)
+    """
+    keyboard = [
+        [KeyboardButton("👥 All Drivers"), KeyboardButton("🚕 Active Rides")],
+        [KeyboardButton("📊 Statistics")],
+        [KeyboardButton(t("main_menu", "en"))]
+    ]
+    return ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
