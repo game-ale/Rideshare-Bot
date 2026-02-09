@@ -80,7 +80,8 @@ async def create_driver(user_id: int, name: str, vehicle_type: VehicleType,
                 vehicle_type=vehicle_type,
                 latitude=latitude,
                 longitude=longitude,
-                available=False
+                available=False,
+                language_code="en"  # Default
             )
             session.add(driver)
             log_with_context(logger, "INFO", f"Driver {name} registered", user_id=user_id)
@@ -163,7 +164,7 @@ async def create_rider(user_id: int, name: str) -> Rider:
             rider.name = name
             log_with_context(logger, "INFO", f"Rider {name} updated profile", user_id=user_id)
         else:
-            rider = Rider(id=user_id, name=name)
+            rider = Rider(id=user_id, name=name, language_code="en")
             session.add(rider)
             log_with_context(logger, "INFO", f"Rider {name} registered", user_id=user_id)
         
@@ -177,6 +178,27 @@ async def get_rider(user_id: int) -> Optional[Rider]:
     async with get_session() as session:
         result = await session.execute(select(Rider).where(Rider.id == user_id))
         return result.scalar_one_or_none()
+
+
+async def set_user_language(user_id: int, language_code: str) -> bool:
+    """Update user's language preference."""
+    async with get_session() as session:
+        # Check if driver
+        result = await session.execute(select(Driver).where(Driver.id == user_id))
+        user = result.scalar_one_or_none()
+        
+        if not user:
+            # Check if rider
+            result = await session.execute(select(Rider).where(Rider.id == user_id))
+            user = result.scalar_one_or_none()
+            
+        if not user:
+            return False
+            
+        user.language_code = language_code
+        await session.commit()
+        log_with_context(logger, "INFO", f"User language set to {language_code}", user_id=user_id)
+        return True
 
 
 # ==================== Ride Operations ====================

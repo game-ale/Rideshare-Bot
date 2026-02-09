@@ -72,3 +72,18 @@ def get_start_ride_keyboard(ride_id: int) -> InlineKeyboardMarkup:
         [InlineKeyboardButton("🚗 Start Ride", callback_data=f"start_ride_{ride_id}")]
     ]
     return InlineKeyboardMarkup(keyboard)
+def get_language_keyboard() -> InlineKeyboardMarkup:
+    """
+    Language selection keyboard.
+    
+    Layout:
+    [ English ] [ የአማርኛ ] [ Afan Oromo ]
+    """
+    keyboard = [
+        [
+            InlineKeyboardButton("English 🇬🇧", callback_data="set_lang_en"),
+            InlineKeyboardButton("አማርኛ 🇪🇹", callback_data="set_lang_am"),
+            InlineKeyboardButton("Afan Oromo 🇪🇹", callback_data="set_lang_om")
+        ]
+    ]
+    return InlineKeyboardMarkup(keyboard)

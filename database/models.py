@@ -25,6 +25,7 @@ class Driver(Base):
     longitude = Column(Float, nullable=False)  # Dummy location
     rating = Column(Float, default=5.0)
     total_rides = Column(Integer, default=0)
+    language_code = Column(String(5), default="en")  # 'en', 'am', 'om'
     created_at = Column(DateTime, default=datetime.utcnow)
     
     # Relationships
@@ -40,6 +41,7 @@ class Rider(Base):
     
     id = Column(BigInteger, primary_key=True)  # Telegram user ID
     name = Column(String(50), nullable=False)
+    language_code = Column(String(5), default="en")  # 'en', 'am', 'om'
     created_at = Column(DateTime, default=datetime.utcnow)
     
     # Relationships

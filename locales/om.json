@@ -1,0 +1,20 @@
+{
+    "welcome_rider": "👋 Bagatti nagaan dhufte, {name}!\n\nImala gaafachuuf qophiidhaa? Mallattoo armaan gadii cuqaasi!",
+    "welcome_driver": "👋 Bagatti nagaan deebite, {name}!\n\n🚗 Konkolaataa: {vehicle}\n⭐ Sadarkaa: {rating}\nHaala: {status}",
+    "main_menu_driver": "🚗 Ani Konkolaachisaadha",
+    "main_menu_rider": "👤 Imala nan Gaafadha",
+    "main_menu_help": "ℹ️ Gargaarsa",
+    "main_menu_lang": "🌐 Qooqa",
+    "request_ride": "🚕 Imala Gaafadhu",
+    "go_available": "✅ Hojii Jalqabi",
+    "go_offline": "❌ Hojii Dhaabi",
+    "my_stats": "📊 Istatistiksii koo",
+    "main_menu": "🏠 Baafata Guddaa",
+    "searching_driver": "🔍 <b>Konkolaachisaa barbaadaa jirra...</b>\n\n📍 Ka'umsa: {location}",
+    "no_drivers": "😔 <b>Konkolaachisaan hin jiru</b>\n\nDhiifama, ammasitti konkolaachisaan dhiyoo jiru hin jiru.\nMaaloo yeroo booda irra deebi'ii yaali!",
+    "driver_assigned": "✅ <b>Konkolaachisaan argameera!</b>\n\nHamma konkolaachisaan mirkaneessutti eigi...",
+    "ride_accepted": "✅ <b>Gaaffiin imalaa fudhatameera!</b>\n\nImalli jalqabameera.",
+    "ride_completed": "✅ <b>Imalli xumurameera!</b>\n\nHojii gaarii!",
+    "select_language": "🌐 <b>Select Language / Qooqa Filadhu / ቋንቋ ይምረጡ</b>",
+    "lang_updated": "✅ Qooqni gara Afaan Oromootti jijjiirameera!"
+}
