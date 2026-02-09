@@ -41,7 +41,7 @@ async def init_db():
                         if 'language_code' not in columns:
                             logger.info(f"⚙️ Migrating {table}: adding language_code column")
                             sync_conn.execute(text(f"ALTER TABLE {table} ADD COLUMN language_code VARCHAR(5) DEFAULT 'en'"))
-                sync_conn.commit()
+            
             
             # We wrap this in another try/except because if it fails, we still want the bot to try and start
             try:
@@ -128,6 +128,20 @@ async def update_driver_rating(driver_id: int, new_rating: int):
             driver.rating = round(new_avg, 2)
             driver.total_rides += 1
             await session.commit()
+
+
+async def get_all_drivers() -> List[Driver]:
+    """Get all registered drivers."""
+    async with get_session() as session:
+        result = await session.execute(select(Driver))
+        return list(result.scalars().all())
+
+
+async def get_available_drivers() -> List[Driver]:
+    """Get all drivers currently marked as available."""
+    async with get_session() as session:
+        result = await session.execute(select(Driver).where(Driver.available == True))
+        return list(result.scalars().all())
 
 
 # ==================== Rider Operations ====================
