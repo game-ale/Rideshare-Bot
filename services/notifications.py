@@ -5,7 +5,11 @@ Centralized system for sending notifications to users.
 from typing import Optional
 from telegram import Bot
 from telegram.constants import ParseMode
+from keyboards.inline import get_ride_confirmation_keyboard, get_rating_keyboard
+from database.db import get_ride
+from services.location import get_location_display
 from utils.logger import logger, log_with_context
+from utils.i18n import t
 
 
 async def notify_driver_assigned(bot: Bot, rider_id: int, driver_name: str, 
@@ -69,7 +73,8 @@ async def notify_rider_assigned(bot: Bot, driver_id: int, rider_name: str,
         await bot.send_message(
             chat_id=driver_id,
             text=message,
-            parse_mode=ParseMode.HTML
+            parse_mode=ParseMode.HTML,
+            reply_markup=get_ride_confirmation_keyboard(ride_id)
         )
         log_with_context(logger, "INFO", 
                         "Driver notified of ride assignment", 
@@ -94,16 +99,71 @@ async def notify_ride_started(bot: Bot, rider_id: int, driver_id: int, ride_id: 
 
 
 async def notify_ride_completed(bot: Bot, rider_id: int, driver_id: int, ride_id: int):
-    """Notify both parties that the ride has been completed."""
-    rider_message = "✅ <b>Ride Completed!</b>\n\nThank you for using RideShare Bot. Please rate your driver."
-    driver_message = "✅ <b>Ride Completed!</b>\n\nRide has been completed successfully."
+    """Notify both parties that the ride has been completed with receipts."""
+    ride = await get_ride(ride_id)
+    
+    if not ride or not ride.driver or not ride.rider:
+        # Fallback to generic message
+        rider_message = "✅ <b>Ride Completed!</b>\n\nThank you for using RideShare Bot. Please rate your driver."
+        driver_message = "✅ <b>Ride Completed!</b>\n\nRide has been completed successfully."
+        try:
+            await bot.send_message(chat_id=rider_id, text=rider_message, parse_mode=ParseMode.HTML, reply_markup=get_rating_keyboard(ride_id))
+            await bot.send_message(chat_id=driver_id, text=driver_message, parse_mode=ParseMode.HTML)
+        except Exception as e:
+            logger.error(f"Failed to send generic completed notifications: {e}")
+        return
+
+    # Simulate calculations for demo
+    distance = ride.distance_km or 2.5
+    duration_mins = int(distance * 3) + 2  # ~3 mins per km + 2 min base
+    base_fare = 50.0
+    per_km_rate = 25.0
+    fare = base_fare + (distance * per_km_rate)
+    
+    pickup_loc = get_location_display(ride.rider_lat, ride.rider_lng)
+    date_str = ride.completed_at.strftime('%Y-%m-%d %H:%M') if ride.completed_at else "Now"
+    
+    # Driver Summary
+    driver_lang = ride.driver.language_code
+    driver_message = t(
+        "ride_summary_driver", driver_lang,
+        ride_id=ride_id,
+        rider_name=ride.rider.name,
+        pickup=pickup_loc,
+        distance=f"{distance:.1f}",
+        duration=f"{duration_mins} mins",
+        earnings=f"{fare:.2f}"
+    )
+    
+    # Rider Receipt
+    rider_lang = ride.rider.language_code
+    rider_message = t(
+        "ride_receipt_rider", rider_lang,
+        ride_id=ride_id,
+        date=date_str,
+        driver_name=ride.driver.name,
+        vehicle=ride.driver.vehicle_type.value,
+        pickup=pickup_loc,
+        distance=f"{distance:.1f}",
+        duration=f"{duration_mins} mins",
+        fare=f"{fare:.2f}"
+    )
     
     try:
-        await bot.send_message(chat_id=rider_id, text=rider_message, parse_mode=ParseMode.HTML)
-        await bot.send_message(chat_id=driver_id, text=driver_message, parse_mode=ParseMode.HTML)
-        log_with_context(logger, "INFO", "Ride completed notifications sent", ride_id=ride_id)
+        await bot.send_message(
+            chat_id=rider_id,
+            text=rider_message,
+            parse_mode=ParseMode.HTML,
+            reply_markup=get_rating_keyboard(ride_id)
+        )
+        await bot.send_message(
+            chat_id=driver_id, 
+            text=driver_message, 
+            parse_mode=ParseMode.HTML
+        )
+        log_with_context(logger, "INFO", "Ride completed receipts sent", ride_id=ride_id)
     except Exception as e:
-        log_with_context(logger, "ERROR", f"Failed to send ride completed notifications: {e}", ride_id=ride_id)
+        log_with_context(logger, "ERROR", f"Failed to send ride completed receipts: {e}", ride_id=ride_id)
 
 
 async def notify_ride_cancelled(bot: Bot, user_id: int, ride_id: int, 

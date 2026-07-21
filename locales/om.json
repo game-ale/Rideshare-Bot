@@ -1,29 +1,89 @@
 {
+    "welcome_first_time": "🚕 <b>Baga nagaan gara RideShare Bot dhuftan!</b>\n\nGargaaraa imala Telegraama.\n\n🚗 <b>Konkolaachisaaf:</b> Galmaa'aa, hojii jalqabadhaa, imala xumurtanii argadhaa.\n👤 <b>Imaltoota:</b> Imala gaafadhaa, konkolaachisaa keessan hordofaa.\n\n👋 Akkam <b>{name}</b>! Maaloo dursa qooqa filadhaa:",
+    "welcome_returning": "👋 <b>Baga nagaan deebitan, {name}!</b>\n\nHar'a maal gochuu barbaaddu?",
     "welcome_rider": "👋 Bagatti nagaan dhuftan, {name}!\n\nImala gaafachuuf qophiidhaa? Mallattoo armaan gadii cuqaasi!",
     "welcome_driver": "👋 Bagatti nagaan deebitaan, {name}!\n\n🚗 Konkolaataa: {vehicle}\n⭐ Sadarkaa: {rating}\nHaala: {status}",
+    "about_rideshare": "ℹ️ <b>Waa'ee RideShare Bot</b>\n\nRideShare Bot sirna imala Telegraama.\n\n✅ Appii buufachuun hin barbaachisu\n✅ Ajaja imala saffisaa\n✅ Konkolaachisaa dhiyoo walitti firoomsu\n✅ Afaan hedduu deeggaruu\n✅ Hordoffii nageenya",
+
     "main_menu_driver": "🚗 Ani Konkolaachisaadha",
     "main_menu_rider": "👤 Imala nan Gaafadha",
     "main_menu_help": "ℹ️ Gargaarsa",
     "main_menu_lang": "🌐 Qooqa",
+    "main_menu": "🏠 Baafata Guddaa",
+    "back_btn": "⬅️ Duuba",
+
+    "help_general": "📚 <b>RideShare Bot Gargaarsa</b>\n\n🚕 <b>Jalqabuuf</b>\n\"👤 Imala nan Gaafadha\" cuqaasi.\n\"🚗 Ani Konkolaachisaadha\" galmee jalqabuuf.\n\n🌐 <b>Qooqa</b>\nQooqa jijjiiruuf \"🌐 Qooqa\" cuqaasi.\n\n❓ Gargaarsa dabalataa? Garee deeggarsa qunnamaa.",
+    "help_rider": "👤 <b>Gargaarsa Imaltootaa</b>\n\n1️⃣ \"🚕 Imala Gaafadhu\" cuqaasi\n2️⃣ Bakka ka'umsa keessan qoodaa\n3️⃣ Konkolaachisaan hamma argamutti eegaa\n4️⃣ Haala imalaa hordofaa\n5️⃣ Konkolaachisaa sadarkaa kennaaf\n\n❌ /cancel haquuf fayyadamaa",
+    "help_driver": "🚗 <b>Gargaarsa Konkolaachisaa</b>\n\n1️⃣ Maqaa, bilbila, konkolaataatiin galmaa'aa\n2️⃣ \"✅ Hojii Jalqabi\" cuqaasi\n3️⃣ Gaaffii imalaa fudhaa\n4️⃣ Gara imaltootti deemaa\n5️⃣ Imala xumuraa\n\n📊 Galii fi raawwii ilaalaa",
+    "help_admin": "🛠 <b>Gargaarsa Bulchiinsaa</b>\n\n👥 Konkolaachistoota ilaalaa\n🚕 Imala sochii jiru hordofaa\n📊 Istatistiksii ilaalaa\n📋 Seenaa imalaa\n❌ Imala haqame\n🔍 Fayyadamaa barbaadi",
+
+    "profile_rider": "👤 <b>Profaayilii Imaltootaa</b>\n\n📛 Maqaa: {name}\n📱 Bilbila: {phone}\n🌐 Qooqa: {language}\n🚕 Imala Waliigalaa: {total_rides}\n📅 Kan makame: {joined}",
+    "profile_driver": "🚗 <b>Profaayilii Konkolaachisaa</b>\n\n📛 Maqaa: {name}\n📱 Bilbila: {phone}\n🌐 Qooqa: {language}\n🚗 Konkolaataa: {vehicle}\n⭐ Sadarkaa: {rating}\n🏆 Imala Waliigalaa: {total_rides}\n📊 Haala: {status}\n📅 Kan makame: {joined}",
+    "profile_not_found": "❌ Profaayiliin hin argamne. Maaloo dursa galmaa'aa.",
+
     "request_ride": "🚕 Imala Gaafadhu",
     "go_available": "✅ Hojii Jalqabi",
     "go_offline": "❌ Hojii Dhaabi",
     "my_stats": "📊 Istatistiksii koo",
-    "main_menu": "🏠 Baafata Guddaa",
+
     "searching_driver": "🔍 <b>Konkolaachisaa barbaadaa jirra...</b>\n\n📍 Ka'umsa: {location}",
+    "searching_animation_1": "🔍 Naannoo dhiyoo skaanaa godhaa jirra...",
+    "searching_animation_2": "🔍 Konkolaachisaa {count} dhiyootti argame...",
+    "searching_animation_3": "🔍 Isa irra caalaa ta'e isiniif filataa jirra...",
+
     "no_drivers": "😔 <b>Konkolaachisaan hin jiru</b>\n\nDhiifama, ammasitti konkolaachisaan dhiyoo jiru hin jiru.\nMaaloo yeroo booda irra deebi'ii yaali!",
     "driver_assigned": "✅ <b>Konkolaachisaan argameera!</b>\n\nHamma konkolaachisaan mirkaneessutti eigi...",
     "ride_accepted": "✅ <b>Gaaffiin imalaa fudhatameera!</b>\n\nImalli jalqabameera.",
     "ride_completed": "✅ <b>Imalli xumurameera!</b>\n\nHojii gaarii!",
+
+    "ride_summary_driver": "📋 <b>Cuunfaa Imalaa</b>\n\n🆔 Imala: #{ride_id}\n👤 Imaltoo: {rider_name}\n📍 Ka'umsa: {pickup}\n🛣 Fageenya: {distance} km\n⏱ Yeroo: {duration}\n💰 Galii: {earnings} ETB\n\nHojii gaarii itti fufaa! 🌟",
+    "ride_receipt_rider": "🧾 <b>Risiiitii Imalaa</b>\n\n🆔 Imala: #{ride_id}\n📅 Guyyaa: {date}\n🚗 Konkolaachisaa: {driver_name}\n🚘 Konkolaataa: {vehicle}\n📍 Ka'umsa: {pickup}\n🛣 Fageenya: {distance} km\n⏱ Yeroo: {duration}\n\n💰 <b>Gatii: {fare} ETB</b>\n\nNutti fayyadamuu keessaniif galatoomaa! 🙏",
+
+    "driver_earnings_stats": "💰 <b>Daashboordii Galii</b>\n\n📊 <b>Har'a</b>\n🚕 Imala: {today_rides}\n💵 Galii: {today_earnings} ETB\n\n📊 <b>Waliigalaa</b>\n🚕 Imala Guutuu: {total_rides}\n💵 Galii Guutuu: {total_earnings} ETB\n⭐ Sadarkaa: {rating}\n🏆 Harka fudhannaa: 100%\n\n📅 Miseensa erga: {joined}",
+
+    "cancel_prompt": "⚠️ <b>Imala sochii jiru haquuf?</b>\n\nDhugumaan haquuf barbaadduu? Irra deddeebi'iin haquun herrega irratti dhiibbaa qabaachuu danda'a.",
+    "cancel_confirmed": "✅ Haqameera. Gara baafata guddaatti deebi'aa jirtu.",
+    "cancel_no_active": "ℹ️ Hojiin sochii jiru hin jiru. Gara baafata guddaatti deebi'aa jirtu.",
+
+    "error_already_active_ride": "⚠️ <b>Imalli sochii jiru argame</b>\n\nDuraan imala sochii jiru qabdu (ID: #{ride_id}).\nMaaloo dursa xumuraa ykn haqaa.",
+    "error_not_registered": "⚠️ Dursa galmaa'uun barbaachisa. Baafata guddaa fayyadamaa.",
+    "error_location_required": "📍 <b>Bakki Barbaachisa</b>\n\nMaaloo mallattoo \"📍 Bakka nuhun qoodi\" gadii cuqaasi.\n\n💡 <i>Yaadachiisa: Tajaajilli bakka meeshaa keessan irratti akka banaa ta'e mirkaneessaa.</i>",
+    "error_ride_not_found": "❌ Imalli hin argamne ykn hin jiru.",
+    "error_generic": "❌ Rakkoon uumame. Maaloo irra deebi'ii yaalaa ykn /start fayyadamaa.",
+
     "select_language": "🌐 <b>Select Language / Qooqa Filadhu / ቋንቋ ይምረጡ</b>",
     "lang_updated": "✅ Qooqni gara Afaan Oromootti jijjiirameera!",
-    "registration_complete": "✅ <b>Galmeen xumurameera!</b>",
-    "select_location": "📍 <b>Eessaa isin fuunu?</b>",
+
+    "registration_complete": "✅ <b>Galmeen xumurameera!</b>\n\nQophiidhaa! Imala fudhachuuf hojii jalqabaa.",
+    "select_location": "📍 <b>Eessaa isin fuunu?</b>\n\nBakka amma jirtan qooduuf mallattoo gadii cuqaasi.",
     "driver_registration_prompt": "🚗 <b>Galmee Konkolaachisaa</b>\n\nMaaloo maqaa keessan guutuu galchaa:",
+    "driver_phone_prompt": "📱 <b>Lakkoofsa Bilbilaa</b>\n\nMaaloo lakkoofsa bilbilaa keessan galchaa:\n\n<i>Fakkeenyaaf: +251912345678 ykn 0912345678</i>",
     "select_vehicle": "Baay'ee gaarii {name}! Gosa konkolaataa keessan filadhaa:",
     "share_location_prompt": "📍 <b>Teessoon keessan eessa?</b>\n\nBakka jirtan nuuf qoodaa.",
     "share_location_btn": "📍 Bakka nuhun qoodi",
     "cancel_btn": "❌ Haqameera",
+    "skip_btn": "⏭ Irra darbi",
     "ride_status_btn": "📍 Haala Imalaa",
-    "cancel_ride_btn": "❌ Imala Haqi"
+    "cancel_ride_btn": "❌ Imala Haqi",
+
+    "ride_status_display": "🚕 <b>Haala Imalaa</b> (ID: #{ride_id})\n\n📊 Haala: {status}\n{driver_info}📍 Ka'umsa: {pickup}\n🕐 Gaafatame: {time}",
+
+    "admin_panel": "🛠 <b>Paanaalii To'annoo Bulchiinsaa</b>\n\n📊 Istatistiksii Saffisaa:\n👥 Konkolaachistoota: {drivers} ({available} toora irra)\n👤 Imaltoota: {riders}\n🚕 Imala Sochii: {active}\n\nArmaan gadiitii filadhaa:",
+    "admin_ride_history": "📋 <b>Imala Dhiyeenya</b>\n\n",
+    "admin_cancelled_rides": "❌ <b>Imala Haqame Dhiyeenya</b>\n\n",
+    "admin_no_rides": "📋 Gosa kanaan imalli hin argamne.",
+
+    "confirm_go_offline": "⚠️ Toora irraa ba'uu barbaadduu? Gaaffii imala haaraa hin argattan.",
+    "phone_shared": "📱 Lakkoofsi bilbilaa ol ka'ameera: {phone}",
+
+    "plate_prompt": "🚗 <b>Lakkoofsa Gabatee Konkolaataa</b>\n\nMaaloo lakkoofsa gabatee konkolaataa keessanii galchaa (Fkn፦ A12345):",
+    "license_prompt": "📸 <b>Eeyyama Konkolaachisaa</b>\n\nMirkanneessuuf suuraa eeyyama konkolaachisummaa keessanii qulqulluu ta'e ergaa.",
+    "pending_review": "⏳ <b>Iyyatni keessan ilaallamaa jira</b>\n\nOdeeffannoo keessan galchuu keessaniif galatoomaa. Iyyatni keessan amma garee keenyaan ilaallamaa jira. Yeroo mirkanaa'u isin beeksisna.",
+    "approved_msg": "🎉 <b>Iyyatni keessan mirkanaa'eera!</b>\n\nBaga gammaddan! Herregni konkolaachisummaa keessanii mirkanaa'eera. Amma toora irra seenuun imala fudhachuu dandeessu.",
+    "rejected_msg": "❌ <b>Iyyatni keessan kufeera</b>\n\nYeroo ammaa kana iyyatni keessan hin mirkanoofne. Odeeffannoo dabalataaf maaloo garee deeggarsaa keenya qunnamaa.",
+    "driver_pending_error": "⚠️ <b>Gochichi hin eyyamamu</b>\n\nHerregni keessan yeroo ammaa kana ilaallamaa jira ykn dhorkameera. Hanga mirkanaa'utti toora irra seenuu hin dandeessan.",
+    "driver_suspended_msg": "🚫 <b>Herregni keessan dhorkameera</b>\n\nHerregni konkolaachisummaa keessanii dhorkameera.",
+    "favorites_menu": "⭐ Iddeewwan Ol Ka'aman",
+    "save_location_prompt": "💾 <b>Iddoo Ol Kaa'i</b>\n\nMaaloo iddoo kanaaf maqaa galchaa (Fkn፦ Mana, Hojii):",
+    "location_saved": "✅ Iddoon '{name}' jedhamu milkiin ol ka'ameera!"
 }

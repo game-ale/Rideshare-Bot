@@ -1,29 +1,89 @@
 {
+    "welcome_first_time": "🚕 <b>Welcome to RideShare Bot!</b>\n\nYour Telegram-powered ride-hailing assistant.\n\n🚗 <b>For Drivers:</b> Register, go online, and earn by completing rides.\n👤 <b>For Riders:</b> Request rides, track your driver, and rate your experience.\n\n👋 Hi <b>{name}</b>! Please select your language first:",
+    "welcome_returning": "👋 <b>Welcome back, {name}!</b>\n\nWhat would you like to do today?",
     "welcome_rider": "👋 Welcome, {name}!\n\nReady to request a ride? Tap the button below!",
     "welcome_driver": "👋 Welcome back, {name}!\n\n🚗 Vehicle: {vehicle}\n⭐ Rating: {rating}\nStatus: {status}",
+    "about_rideshare": "ℹ️ <b>About RideShare Bot</b>\n\nRideShare Bot is a Telegram-first ride-hailing system.\n\n✅ No app download needed\n✅ Quick ride booking via chat\n✅ Real-time driver matching\n✅ Multi-language support\n✅ Secure ride tracking",
+
     "main_menu_driver": "🚗 I'm a Driver",
     "main_menu_rider": "👤 Request a Ride",
     "main_menu_help": "ℹ️ Help",
     "main_menu_lang": "🌐 Language",
+    "main_menu": "🏠 Main Menu",
+    "back_btn": "⬅️ Back",
+
+    "help_general": "📚 <b>RideShare Bot Help</b>\n\n🚕 <b>Getting Started</b>\nTap \"👤 Request a Ride\" to book as a rider.\nTap \"🚗 I'm a Driver\" to register and start earning.\n\n🌐 <b>Language</b>\nTap \"🌐 Language\" to switch between English, Amharic, or Afan Oromo.\n\n❓ Need more help? Contact our support team.",
+    "help_rider": "👤 <b>Rider Help</b>\n\n1️⃣ Tap \"🚕 Request Ride\"\n2️⃣ Share your pickup location\n3️⃣ Wait for driver match\n4️⃣ Track your ride status\n5️⃣ Rate your driver after completion\n\n❌ <b>Cancel:</b> Use /cancel anytime to exit\n📍 <b>Status:</b> Check ride status with the button",
+    "help_driver": "🚗 <b>Driver Help</b>\n\n1️⃣ Register with your name, phone, vehicle & location\n2️⃣ Go online with \"✅ Go Available\"\n3️⃣ Accept incoming ride requests\n4️⃣ Navigate to pickup & start the ride\n5️⃣ Complete the ride when done\n\n📊 <b>Stats:</b> View your earnings & performance\n❌ <b>Offline:</b> Go offline when you're done",
+    "help_admin": "🛠 <b>Admin Help</b>\n\n👥 View all registered drivers\n🚕 Monitor active rides\n📊 View platform statistics\n📋 View ride history\n❌ View cancelled rides\n🔍 Search users by ID",
+
+    "profile_rider": "👤 <b>Your Rider Profile</b>\n\n📛 Name: {name}\n📱 Phone: {phone}\n🌐 Language: {language}\n🚕 Total Rides: {total_rides}\n📅 Joined: {joined}",
+    "profile_driver": "🚗 <b>Your Driver Profile</b>\n\n📛 Name: {name}\n📱 Phone: {phone}\n🌐 Language: {language}\n🚗 Vehicle: {vehicle}\n⭐ Rating: {rating}\n🏆 Total Rides: {total_rides}\n📊 Status: {status}\n📅 Joined: {joined}",
+    "profile_not_found": "❌ No profile found. Please register first using the main menu.",
+
     "request_ride": "🚕 Request Ride",
     "go_available": "✅ Go Available",
     "go_offline": "❌ Go Offline",
     "my_stats": "📊 My Stats",
-    "main_menu": "🏠 Main Menu",
+
     "searching_driver": "🔍 <b>Searching for nearby drivers...</b>\n\n📍 Pickup: {location}",
+    "searching_animation_1": "🔍 Scanning nearby area...",
+    "searching_animation_2": "🔍 Found {count} available driver(s) nearby...",
+    "searching_animation_3": "🔍 Selecting the best match for you...",
+
     "no_drivers": "😔 <b>No Drivers Available</b>\n\nSorry, there are no drivers nearby at the moment.\nPlease try again later!",
-    "driver_assigned": "✅ <b>Driver Assigned!</b>\n\nWaiting for driver confirmation...",
+    "driver_assigned": "✅ <b>Driver Found!</b>\n\nWaiting for driver confirmation...",
     "ride_accepted": "✅ <b>Ride Accepted!</b>\n\nRide is now in progress.",
     "ride_completed": "✅ <b>Ride Completed!</b>\n\nGreat job!",
+
+    "ride_summary_driver": "📋 <b>Ride Summary</b>\n\n🆔 Ride: #{ride_id}\n👤 Rider: {rider_name}\n📍 Pickup: {pickup}\n🛣 Distance: {distance} km\n⏱ Duration: {duration}\n💰 Earnings: {earnings} ETB\n\nKeep up the great work! 🌟",
+    "ride_receipt_rider": "🧾 <b>Ride Receipt</b>\n\n🆔 Ride: #{ride_id}\n📅 Date: {date}\n🚗 Driver: {driver_name}\n🚘 Vehicle: {vehicle}\n📍 Pickup: {pickup}\n🛣 Distance: {distance} km\n⏱ Duration: {duration}\n\n💰 <b>Fare: {fare} ETB</b>\n\nThank you for riding with us! 🙏",
+
+    "driver_earnings_stats": "💰 <b>Earnings Dashboard</b>\n\n📊 <b>Today</b>\n🚕 Rides: {today_rides}\n💵 Earnings: {today_earnings} ETB\n\n📊 <b>All Time</b>\n🚕 Total Rides: {total_rides}\n💵 Total Earnings: {total_earnings} ETB\n⭐ Rating: {rating}\n🏆 Acceptance Rate: 100%\n\n📅 Member since: {joined}",
+
+    "cancel_prompt": "⚠️ <b>Cancel Active Ride?</b>\n\nAre you sure you want to cancel? Frequent cancellations may affect your account.",
+    "cancel_confirmed": "✅ Operation cancelled. Returning to main menu.",
+    "cancel_no_active": "ℹ️ No active operation to cancel. Returning to main menu.",
+
+    "error_already_active_ride": "⚠️ <b>Active Ride Found</b>\n\nYou already have an active ride (ID: #{ride_id}).\nPlease complete or cancel it first.",
+    "error_not_registered": "⚠️ You need to register first. Use the main menu to get started.",
+    "error_location_required": "📍 <b>Location Required</b>\n\nPlease use the \"📍 Share My Location\" button below to share your GPS location.\n\n💡 <i>Tip: Make sure location services are enabled on your device.</i>",
+    "error_ride_not_found": "❌ Ride not found or no longer available.",
+    "error_generic": "❌ Something went wrong. Please try again or use /start to return to the main menu.",
+
     "select_language": "🌐 <b>Select Language / Qooqa Filadhu / ቋንቋ ይምረጡ</b>",
     "lang_updated": "✅ Language updated to English!",
-    "registration_complete": "✅ <b>Registration Complete!</b>",
-    "select_location": "📍 <b>Where should we pick you up?</b>",
-    "driver_registration_prompt": "🚗 <b>Driver Registration</b>\n\nPlease enter your full name:",
-    "select_vehicle": "Great, {name}! Select your vehicle:",
+
+    "registration_complete": "✅ <b>Registration Complete!</b>\n\nYou're all set! Go online to start receiving ride requests.",
+    "select_location": "📍 <b>Where should we pick you up?</b>\n\nTap the button below to share your current GPS location.",
+    "driver_registration_prompt": "🚗 <b>Driver Registration</b>\n\nLet's get you set up! Please enter your full name:",
+    "driver_phone_prompt": "📱 <b>Phone Number</b>\n\nPlease enter your phone number:\n\n<i>Examples: +251912345678 or 0912345678</i>",
+    "select_vehicle": "Great, {name}! Select your vehicle type:",
     "share_location_prompt": "📍 <b>Where are you based?</b>\n\nShare your location to receive rides nearby.",
     "share_location_btn": "📍 Share My Location",
     "cancel_btn": "❌ Cancel",
+    "skip_btn": "⏭ Skip",
     "ride_status_btn": "📍 Ride Status",
-    "cancel_ride_btn": "❌ Cancel Ride"
+    "cancel_ride_btn": "❌ Cancel Ride",
+
+    "ride_status_display": "🚕 <b>Ride Status</b> (ID: #{ride_id})\n\n📊 Status: {status}\n{driver_info}📍 Pickup: {pickup}\n🕐 Requested: {time}",
+
+    "admin_panel": "🛠 <b>Admin Control Panel</b>\n\n📊 Quick Stats:\n👥 Drivers: {drivers} ({available} online)\n👤 Riders: {riders}\n🚕 Active Rides: {active}\n\nSelect an action below:",
+    "admin_ride_history": "📋 <b>Recent Completed Rides</b>\n\n",
+    "admin_cancelled_rides": "❌ <b>Recent Cancelled Rides</b>\n\n",
+    "admin_no_rides": "📋 No rides found in this category.",
+
+    "confirm_go_offline": "⚠️ Are you sure you want to go offline? You won't receive new ride requests.",
+    "phone_shared": "📱 Phone number saved: {phone}",
+
+    "plate_prompt": "🚗 <b>Vehicle Plate Number</b>\n\nPlease enter your vehicle's plate number (e.g., A12345):",
+    "license_prompt": "📸 <b>Driver's License</b>\n\nPlease upload a clear photo of your driver's license for verification.",
+    "pending_review": "⏳ <b>Application Under Review</b>\n\nThank you for submitting your details. Your application is currently pending review by our team. You will be notified once approved.",
+    "approved_msg": "🎉 <b>Application Approved!</b>\n\nCongratulations! Your driver account has been approved. You can now go Available and start accepting rides.",
+    "rejected_msg": "❌ <b>Application Rejected</b>\n\nUnfortunately, your application was not approved at this time. Please contact support for more details.",
+    "driver_pending_error": "⚠️ <b>Action Not Allowed</b>\n\nYour account is currently under review or suspended. You cannot go online until approved.",
+    "driver_suspended_msg": "🚫 <b>Account Suspended</b>\n\nYour driver account has been suspended.",
+    "favorites_menu": "⭐ Saved Locations",
+    "save_location_prompt": "💾 <b>Save Location</b>\n\nPlease enter a name for this location (e.g., Home, Work):",
+    "location_saved": "✅ Location '{name}' has been saved successfully!"
 }

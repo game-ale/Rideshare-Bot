@@ -6,9 +6,8 @@ Note: FSM manages interaction flow, while the database is the single source of t
 """
 from datetime import datetime
 from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime, ForeignKey, Enum as SQLEnum, BigInteger
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
-from enums import RideStatus, VehicleType
+from sqlalchemy.orm import declarative_base, relationship
+from enums import RideStatus, VehicleType, DriverStatus
 
 Base = declarative_base()
 
@@ -19,12 +18,17 @@ class Driver(Base):
     
     id = Column(BigInteger, primary_key=True)  # Telegram user ID
     name = Column(String(50), nullable=False)
+    phone_number = Column(String(20), nullable=True)  # Optional phone number
     vehicle_type = Column(SQLEnum(VehicleType), nullable=False)
+    plate_number = Column(String(20), nullable=True)
+    license_file_id = Column(String(255), nullable=True)
+    status = Column(SQLEnum(DriverStatus), default=DriverStatus.PENDING)
     available = Column(Boolean, default=False)
     latitude = Column(Float, nullable=False)  # Dummy location
     longitude = Column(Float, nullable=False)  # Dummy location
     rating = Column(Float, default=5.0)
     total_rides = Column(Integer, default=0)
+    wallet_balance = Column(Float, default=0.0)
     language_code = Column(String(5), default="en")  # 'en', 'am', 'om'
     created_at = Column(DateTime, default=datetime.utcnow)
     
@@ -41,14 +45,33 @@ class Rider(Base):
     
     id = Column(BigInteger, primary_key=True)  # Telegram user ID
     name = Column(String(50), nullable=False)
+    phone_number = Column(String(20), nullable=True)  # Optional phone number
     language_code = Column(String(5), default="en")  # 'en', 'am', 'om'
+    wallet_balance = Column(Float, default=0.0)
     created_at = Column(DateTime, default=datetime.utcnow)
     
     # Relationships
     rides = relationship("Ride", back_populates="rider", foreign_keys="Ride.rider_id")
+    saved_locations = relationship("SavedLocation", back_populates="rider", cascade="all, delete-orphan")
     
     def __repr__(self):
         return f"<Rider(id={self.id}, name={self.name})>"
+
+class SavedLocation(Base):
+    """Stores favorite locations for riders (e.g., Home, Work)."""
+    __tablename__ = "saved_locations"
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    rider_id = Column(BigInteger, ForeignKey("riders.id"), nullable=False)
+    name = Column(String(50), nullable=False)
+    latitude = Column(Float, nullable=False)
+    longitude = Column(Float, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    
+    rider = relationship("Rider", back_populates="saved_locations")
+    
+    def __repr__(self):
+        return f"<SavedLocation(name={self.name}, rider_id={self.rider_id})>"
 
 
 class Ride(Base):
@@ -65,8 +88,14 @@ class Ride(Base):
     status = Column(SQLEnum(RideStatus), nullable=False, default=RideStatus.REQUESTED)
     rider_lat = Column(Float, nullable=False)  # Pickup location
     rider_lng = Column(Float, nullable=False)
-    distance = Column(Float, nullable=True)  # Distance to driver in km
-    rating = Column(Integer, nullable=True)  # Rider's rating of driver (1-5)
+    dest_lat = Column(Float, nullable=True)    # Destination location
+    dest_lng = Column(Float, nullable=True)
+    distance = Column(Float, nullable=True)    # Distance to driver in km
+    estimated_fare = Column(Float, nullable=True) # Estimated fare
+    estimated_duration = Column(Integer, nullable=True) # Estimated duration in minutes
+    final_fare = Column(Float, nullable=True)  # Actual charged amount
+    payment_method = Column(String(20), nullable=True) # CASH, WALLET, CARD
+    rating = Column(Integer, nullable=True)    # Rider's rating of driver (1-5)
     created_at = Column(DateTime, default=datetime.utcnow)
     completed_at = Column(DateTime, nullable=True)
     

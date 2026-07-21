@@ -17,6 +17,7 @@ from handlers.start import setup_start_handlers
 from handlers.driver import setup_driver_handlers
 from handlers.rider import setup_rider_handlers
 from handlers.admin import setup_admin_handlers
+from handlers.support import setup_support_handlers
 from utils.logger import logger
 
 
@@ -38,6 +39,7 @@ def main():
     setup_driver_handlers(application)
     setup_rider_handlers(application)
     setup_admin_handlers(application)
+    setup_support_handlers(application)
     
     # Add error handler
     async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:

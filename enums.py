@@ -5,11 +5,19 @@ Provides type-safe constants for ride and driver states.
 from enum import Enum
 
 
+class DriverStatus(str, Enum):
+    """Driver verification states."""
+    PENDING = "PENDING"
+    APPROVED = "APPROVED"
+    REJECTED = "REJECTED"
+    SUSPENDED = "SUSPENDED"
+
 class RideStatus(str, Enum):
     """Ride lifecycle states - single source of truth for ride status."""
     REQUESTED = "REQUESTED"
     ASSIGNED = "ASSIGNED"
     ONGOING = "ONGOING"
+    AWAITING_PAYMENT = "AWAITING_PAYMENT"
     COMPLETED = "COMPLETED"
     CANCELLED = "CANCELLED"
 

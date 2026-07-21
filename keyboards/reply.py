@@ -30,14 +30,14 @@ def get_driver_menu_keyboard(is_available: bool = False, lang: str = "en") -> Re
     if is_available:
         keyboard = [
             [KeyboardButton(t("go_offline", lang))],
-            [KeyboardButton(t("my_stats", lang))],
-            [KeyboardButton(t("main_menu", lang))]
+            [KeyboardButton(t("my_stats", lang)), KeyboardButton("💳 Wallet")],
+            [KeyboardButton("🤖 AI Support"), KeyboardButton(t("main_menu", lang))]
         ]
     else:
         keyboard = [
             [KeyboardButton(t("go_available", lang))],
-            [KeyboardButton(t("my_stats", lang))],
-            [KeyboardButton(t("main_menu", lang))]
+            [KeyboardButton(t("my_stats", lang)), KeyboardButton("💳 Wallet")],
+            [KeyboardButton("🤖 AI Support"), KeyboardButton(t("main_menu", lang))]
         ]
     return ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
 
@@ -50,12 +50,13 @@ def get_rider_menu_keyboard(has_active_ride: bool = False, lang: str = "en") -> 
         keyboard = [
             [KeyboardButton(t("ride_status_btn", lang))],
             [KeyboardButton(t("cancel_ride_btn", lang))],
-            [KeyboardButton(t("main_menu", lang))]
+            [KeyboardButton("🤖 AI Support"), KeyboardButton(t("main_menu", lang))]
         ]
     else:
         keyboard = [
             [KeyboardButton(t("request_ride", lang))],
-            [KeyboardButton(t("main_menu", lang))]
+            [KeyboardButton(t("favorites_menu", lang)), KeyboardButton("💳 Wallet")],
+            [KeyboardButton("🤖 AI Support"), KeyboardButton(t("main_menu", lang))]
         ]
     return ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
 
@@ -83,6 +84,18 @@ def get_location_keyboard(lang: str = "en") -> ReplyKeyboardMarkup:
     return ReplyKeyboardMarkup(keyboard, resize_keyboard=True, one_time_keyboard=True)
 
 
+def get_phone_keyboard(lang: str = "en") -> ReplyKeyboardMarkup:
+    """
+    Keyboard for phone number input with contact sharing and skip option.
+    """
+    keyboard = [
+        [KeyboardButton("📱 Share Contact", request_contact=True)],
+        [KeyboardButton(t("skip_btn", lang))],
+        [KeyboardButton(t("cancel_btn", lang))]
+    ]
+    return ReplyKeyboardMarkup(keyboard, resize_keyboard=True, one_time_keyboard=True)
+
+
 def remove_keyboard() -> ReplyKeyboardRemove:
     """Remove the current keyboard."""
     return ReplyKeyboardRemove()
@@ -90,11 +103,25 @@ def remove_keyboard() -> ReplyKeyboardRemove:
 
 def get_admin_menu_keyboard() -> ReplyKeyboardMarkup:
     """
-    Admin panel keyboard. (Stay in English as it's for the owner)
+    Admin panel keyboard with comprehensive management options.
     """
     keyboard = [
-        [KeyboardButton("👥 All Drivers"), KeyboardButton("🚕 Active Rides")],
-        [KeyboardButton("📊 Statistics")],
+        [KeyboardButton("📋 Pending Drivers"), KeyboardButton("👥 All Drivers")],
+        [KeyboardButton("🚕 Active Rides"), KeyboardButton("📋 Ride History")],
+        [KeyboardButton("❌ Cancelled Rides"), KeyboardButton("📊 Statistics")],
+        [KeyboardButton("🔍 Search User")],
         [KeyboardButton(t("main_menu", "en"))]
     ]
+    return ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
+
+
+def get_favorites_keyboard(locations: list, lang: str = "en") -> ReplyKeyboardMarkup:
+    """
+    Keyboard showing saved locations + option to add new.
+    """
+    keyboard = []
+    for loc in locations:
+        keyboard.append([KeyboardButton(f"📍 {loc.name}")])
+    keyboard.append([KeyboardButton("➕ Save Current Location")])
+    keyboard.append([KeyboardButton(t("back_btn", lang))])
     return ReplyKeyboardMarkup(keyboard, resize_keyboard=True)

@@ -1,29 +1,89 @@
 {
+    "welcome_first_time": "🚕 <b>እንኳን ወደ RideShare Bot በደህና መጡ!</b>\n\nየቴሌግራም ጉዞ አገልግሎት ረዳት።\n\n🚗 <b>ለሹፌሮች:</b> ይመዝገቡ፣ ስራ ይጀምሩ፣ ጉዞ በማጠናቀቅ ያገኛሉ።\n👤 <b>ለተጓዦች:</b> ጉዞ ይጠይቁ፣ ሹፌርዎን ይከታተሉ።\n\n👋 ሰላም <b>{name}</b>! እባክዎ መጀመሪያ ቋንቋ ይምረጡ:",
+    "welcome_returning": "👋 <b>እንኳን ደህና ተመለሱ፣ {name}!</b>\n\nዛሬ ምን ማድረግ ይፈልጋሉ?",
     "welcome_rider": "👋 እንኳን ደህና መጡ፣ {name}!\n\nጉዞ ለመጠየቅ ዝግጁ ነዎት? ከታች ያለውን ቁልፍ ይጫኑ!",
     "welcome_driver": "👋 እንኳን ደህና መጡ፣ {name}!\n\n🚗 ተሽከርካሪ: {vehicle}\n⭐ ደረጃ: {rating}\nሁኔታ: {status}",
+    "about_rideshare": "ℹ️ <b>ስለ RideShare Bot</b>\n\nRideShare Bot የቴሌግራም ጉዞ አገልግሎት ነው።\n\n✅ መተግበሪያ ማውረድ አያስፈልግም\n✅ ፈጣን ጉዞ ማዝዣ\n✅ ቅርብ ሹፌር ማዛመድ\n✅ ብዙ ቋንቋ ድጋፍ\n✅ ደህንነቱ የተጠበቀ ክትትል",
+
     "main_menu_driver": "🚗 እኔ ሹፌር ነኝ",
     "main_menu_rider": "👤 ጉዞ እፈልጋለሁ",
     "main_menu_help": "ℹ️ እርዳታ",
     "main_menu_lang": "🌐 ቋንቋ",
+    "main_menu": "🏠 ዋና ማውጫ",
+    "back_btn": "⬅️ ተመለስ",
+
+    "help_general": "📚 <b>RideShare Bot እርዳታ</b>\n\n🚕 <b>ለመጀመር</b>\n\"👤 ጉዞ እፈልጋለሁ\" የሚለውን ይጫኑ።\n\"🚗 እኔ ሹፌር ነኝ\" ለሹፌር ምዝገባ ይጫኑ።\n\n🌐 <b>ቋንቋ</b>\nቋንቋ ለመቀየር \"🌐 ቋንቋ\" ይጫኑ።\n\n❓ ተጨማሪ እርዳታ ከፈለጉ ድጋፍ ቡድናችንን ያግኙ።",
+    "help_rider": "👤 <b>የተጓዥ እርዳታ</b>\n\n1️⃣ \"🚕 ጉዞ ጠይቅ\" ይጫኑ\n2️⃣ የመነሻ ቦታዎን ያጋሩ\n3️⃣ ሹፌር እስኪገኝ ይጠብቁ\n4️⃣ የጉዞ ሁኔታ ይከታተሉ\n5️⃣ ሹፌሩን ይደርጃሉ\n\n❌ /cancel ለመሰረዝ ይጠቀሙ",
+    "help_driver": "🚗 <b>የሹፌር እርዳታ</b>\n\n1️⃣ በስም፣ ስልክ፣ ተሽከርካሪ ይመዝገቡ\n2️⃣ \"✅ ስራ ጀምር\" ይጫኑ\n3️⃣ የጉዞ ጥያቄዎችን ይቀበሉ\n4️⃣ ወደ ተጓዡ ይሂዱ\n5️⃣ ጉዞውን ያጠናቅቁ\n\n📊 ገቢና አፈጻጸም ይመልከቱ",
+    "help_admin": "🛠 <b>የአስተዳዳሪ እርዳታ</b>\n\n👥 ሹፌሮችን ይመልከቱ\n🚕 ንቁ ጉዞዎችን ይከታተሉ\n📊 ስታቲስቲክስ ይመልከቱ\n📋 የጉዞ ታሪክ\n❌ የተሰረዙ ጉዞዎች\n🔍 ተጠቃሚ ፈልግ",
+
+    "profile_rider": "👤 <b>የተጓዥ መገለጫ</b>\n\n📛 ስም: {name}\n📱 ስልክ: {phone}\n🌐 ቋንቋ: {language}\n🚕 ጠቅላላ ጉዞ: {total_rides}\n📅 ተቀላቅሏል: {joined}",
+    "profile_driver": "🚗 <b>የሹፌር መገለጫ</b>\n\n📛 ስም: {name}\n📱 ስልክ: {phone}\n🌐 ቋንቋ: {language}\n🚗 ተሽከርካሪ: {vehicle}\n⭐ ደረጃ: {rating}\n🏆 ጠቅላላ ጉዞ: {total_rides}\n📊 ሁኔታ: {status}\n📅 ተቀላቅሏል: {joined}",
+    "profile_not_found": "❌ መገለጫ አልተገኘም። እባክዎ መጀመሪያ ይመዝገቡ።",
+
     "request_ride": "🚕 ጉዞ ጠይቅ",
     "go_available": "✅ ስራ ጀምር",
     "go_offline": "❌ ስራ አቁም",
     "my_stats": "📊 የእኔ መረጃ",
-    "main_menu": "🏠 ዋና ማውጫ",
+
     "searching_driver": "🔍 <b>ሹፌር እየፈለግን ነው...</b>\n\n📍 መነሻ: {location}",
+    "searching_animation_1": "🔍 አካባቢውን እየቃኘን ነው...",
+    "searching_animation_2": "🔍 {count} ሹፌር(ሮች) በአቅራቢያ ተገኝተዋል...",
+    "searching_animation_3": "🔍 ለእርስዎ ምርጡን ሹፌር እየመረጥን ነው...",
+
     "no_drivers": "😔 <b>ምንም ሹፌር አልተገኘም</b>\n\nይቅርታ፣ በአሁኑ ሰዓት በአቅራቢያዎ ምንም ሹፌር የለም።\nእባክዎ ቆይተው እንደገና ይሞክሩ!",
     "driver_assigned": "✅ <b>ሹፌር ተገኝቷል!</b>\n\nሹፌሩ እስኪያረጋግጥ ድረስ ይጠብቁ...",
     "ride_accepted": "✅ <b>የጉዞ ጥያቄ ተቀባይነት አግኝቷል!</b>\n\nጉዞው ተጀምሯል።",
     "ride_completed": "✅ <b>ጉዞው ተጠናቋል!</b>\n\nበጣም ጥሩ!",
+
+    "ride_summary_driver": "📋 <b>የጉዞ ማጠቃለያ</b>\n\n🆔 ጉዞ: #{ride_id}\n👤 ተጓዥ: {rider_name}\n📍 መነሻ: {pickup}\n🛣 ርቀት: {distance} ኪ.ሜ\n⏱ ጊዜ: {duration}\n💰 ገቢ: {earnings} ብር\n\nጥሩ ሥራ ይቀጥሉ! 🌟",
+    "ride_receipt_rider": "🧾 <b>የጉዞ ደረሰኝ</b>\n\n🆔 ጉዞ: #{ride_id}\n📅 ቀን: {date}\n🚗 ሹፌር: {driver_name}\n🚘 ተሽከርካሪ: {vehicle}\n📍 መነሻ: {pickup}\n🛣 ርቀት: {distance} ኪ.ሜ\n⏱ ጊዜ: {duration}\n\n💰 <b>ዋጋ: {fare} ብር</b>\n\nስለተጠቀሙ እናመሰግናለን! 🙏",
+
+    "driver_earnings_stats": "💰 <b>የገቢ ዳሽቦርድ</b>\n\n📊 <b>ዛሬ</b>\n🚕 ጉዞዎች: {today_rides}\n💵 ገቢ: {today_earnings} ብር\n\n📊 <b>ጠቅላላ</b>\n🚕 ጉዞዎች: {total_rides}\n💵 ገቢ: {total_earnings} ብር\n⭐ ደረጃ: {rating}\n🏆 ተቀባይነት: 100%\n\n📅 ከ: {joined}",
+
+    "cancel_prompt": "⚠️ <b>ንቁ ጉዞ ይሰረዝ?</b>\n\nእርግጠኛ ነዎት? ተደጋጋሚ ስረዛ መለያዎን ሊጎዳ ይችላል።",
+    "cancel_confirmed": "✅ ተሰርዟል። ወደ ዋና ማውጫ እየተመለሱ ነው።",
+    "cancel_no_active": "ℹ️ ምንም ንቁ ስራ የለም። ወደ ዋና ማውጫ እየተመለሱ ነው።",
+
+    "error_already_active_ride": "⚠️ <b>ንቁ ጉዞ ተገኝቷል</b>\n\nቀድሞውኑ ንቁ ጉዞ አለዎት (ID: #{ride_id})።\nእባክዎ መጀመሪያ ያጠናቅቁ ወይም ይሰርዙ።",
+    "error_not_registered": "⚠️ መጀመሪያ መመዝገብ ያስፈልጋል። ዋና ማውጫውን ይጠቀሙ።",
+    "error_location_required": "📍 <b>ቦታ ያስፈልጋል</b>\n\nእባክዎ ከታች ያለውን \"📍 ያለሁበትን ላክ\" ቁልፍ ይጫኑ።\n\n💡 <i>ምክር: የቦታ አገልግሎት በመሳሪያዎ ላይ እንደበራ ያረጋግጡ።</i>",
+    "error_ride_not_found": "❌ ጉዞ አልተገኘም ወይም ከእንግዲህ አይገኝም።",
+    "error_generic": "❌ ችግር ተፈጥሯል። እባክዎ እንደገና ይሞክሩ ወይም /start ይጠቀሙ።",
+
     "select_language": "🌐 <b>Select Language / Qooqa Filadhu / ቋንቋ ይምረጡ</b>",
     "lang_updated": "✅ ቋንቋ ወደ አማርኛ ተቀይሯል!",
-    "registration_complete": "✅ <b>ምዝገባው ተጠናቋል!</b>",
-    "select_location": "📍 <b>ከየት እንውሰድዎት?</b>",
-    "driver_registration_prompt": "🚗 <b>የሹፌር ምዝገባ</b>\n\nእባክዎ ሙሉ ስምዎን ያስገቡ:",
+
+    "registration_complete": "✅ <b>ምዝገባው ተጠናቋል!</b>\n\nዝግጁ ነዎት! ጉዞ ለመቀበል ስራ ይጀምሩ።",
+    "select_location": "📍 <b>ከየት እንውሰድዎት?</b>\n\nያሉበትን ቦታ ለማጋራት ከታች ያለውን ቁልፍ ይጫኑ።",
+    "driver_registration_prompt": "🚗 <b>የሹፌር ምዝገባ</b>\n\nመጀመር እንጀምር! እባክዎ ሙሉ ስምዎን ያስገቡ:",
+    "driver_phone_prompt": "📱 <b>ስልክ ቁጥር</b>\n\nእባክዎ ስልክ ቁጥርዎን ያስገቡ:\n\n<i>ምሳሌ: +251912345678 ወይም 0912345678</i>",
     "select_vehicle": "በጣም ጥሩ {name}! ተሽከርካሪዎን ይምረጡ:",
     "share_location_prompt": "📍 <b>መነሻዎ የት ነው?</b>\n\nአቅራቢያዎ ያሉ የጉዞ ትዕዛዞችን ለመቀበል ያሉበትን ይላኩ።",
     "share_location_btn": "📍 ያለሁበትን ላክ",
     "cancel_btn": "❌ ተሰርዟል",
+    "skip_btn": "⏭ ዝለል",
     "ride_status_btn": "📍 የጉዞ ሁኔታ",
-    "cancel_ride_btn": "❌ ጉዞ ሰርዝ"
+    "cancel_ride_btn": "❌ ጉዞ ሰርዝ",
+
+    "ride_status_display": "🚕 <b>የጉዞ ሁኔታ</b> (ID: #{ride_id})\n\n📊 ሁኔታ: {status}\n{driver_info}📍 መነሻ: {pickup}\n🕐 ተጠይቋል: {time}",
+
+    "admin_panel": "🛠 <b>የአስተዳዳሪ ቁጥጥር ፓነል</b>\n\n📊 ፈጣን ስታቲስቲክስ:\n👥 ሹፌሮች: {drivers} ({available} ኦንላይን)\n👤 ተጓዦች: {riders}\n🚕 ንቁ ጉዞዎች: {active}\n\nከታች ይምረጡ:",
+    "admin_ride_history": "📋 <b>የቅርብ ጊዜ ጉዞዎች</b>\n\n",
+    "admin_cancelled_rides": "❌ <b>የቅርብ ጊዜ የተሰረዙ ጉዞዎች</b>\n\n",
+    "admin_no_rides": "📋 በዚህ ምድብ ምንም ጉዞ አልተገኘም።",
+
+    "confirm_go_offline": "⚠️ ከመስመር ውጭ መሆን ይፈልጋሉ? አዲስ ጉዞ አይቀበሉም።",
+    "phone_shared": "📱 ስልክ ቁጥር ተቀምጧል: {phone}",
+
+    "plate_prompt": "🚗 <b>የተሽከርካሪ ሰሌዳ ቁጥር</b>\n\nእባክዎ የተሽከርካሪዎን ሰሌዳ ቁጥር ያስገቡ (ለምሳሌ፦ A12345):",
+    "license_prompt": "📸 <b>መንጃ ፈቃድ</b>\n\nለማረጋገጫ ግልጽ የሆነ የመንጃ ፈቃድዎን ፎቶ ይላኩ።",
+    "pending_review": "⏳ <b>ማመልከቻው እየተገመገመ ነው</b>\n\nዝርዝሮችዎን ስላስገቡ እናመሰግናለን። ማመልከቻዎ አሁን በቡድናችን እየተገመገመ ነው። ሲጸድቅ እናሳውቅዎታለን።",
+    "approved_msg": "🎉 <b>ማመልከቻዎ ጸድቋል!</b>\n\nእንኳን ደስ አለዎት! የሹፌር መለያዎ ጸድቋል። አሁን ኦንላይን በመግባት ጉዞዎችን መቀበል ይችላሉ።",
+    "rejected_msg": "❌ <b>ማመልከቻዎ ውድቅ ተደርጓል</b>\n\nበአሁኑ ጊዜ ማመልከቻዎ አልጸደቀም። ለተጨማሪ መረጃ እባክዎ ድጋፍ ሰጪ ቡድናችንን ያነጋግሩ።",
+    "driver_pending_error": "⚠️ <b>ድርጊቱ አልተፈቀደም</b>\n\nመለያዎ በአሁኑ ጊዜ እየተገመገመ ወይም ታግዷል። እስከሚጸድቅ ድረስ ኦንላይን መግባት አይችሉም።",
+    "driver_suspended_msg": "🚫 <b>መለያዎ ታግዷል</b>\n\nየሹፌር መለያዎ ታግዷል።",
+    "favorites_menu": "⭐ የተቀመጡ ቦታዎች",
+    "save_location_prompt": "💾 <b>ቦታ ያስቀምጡ</b>\n\nእባክዎ ለዚህ ቦታ ስም ያስገቡ (ለምሳሌ፦ ቤት፣ ስራ):",
+    "location_saved": "✅ '{name}' የተባለው ቦታ በተሳካ ሁኔታ ተቀምጧል!"
 }

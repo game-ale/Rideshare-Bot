@@ -54,3 +54,19 @@ def get_static_map_url(lat: float, lng: float, zoom: int = 15) -> str:
     Note: Using OpenStreetMap static maps for privacy and cost-efficiency.
     """
     return f"https://static-maps.yandex.ru/1.x/?ll={lng},{lat}&z={zoom}&l=map&pt={lng},{lat},pm2rdl"
+
+
+def get_route_static_map_url(lat1: float, lng1: float, lat2: float, lng2: float) -> str:
+    """
+    Generate a static map image showing both pickup and destination markers.
+    The map automatically bounds to fit both markers.
+    """
+    return f"https://static-maps.yandex.ru/1.x/?l=map&pt={lng1},{lat1},pm2rdl~{lng2},{lat2},pm2gnl"
+
+
+def get_google_maps_route_link(lat1: float, lng1: float, lat2: float, lng2: float) -> str:
+    """Generate a Google Maps routing link for drivers."""
+    return f"https://www.google.com/maps/dir/?api=1&origin={lat1},{lng1}&destination={lat2},{lng2}"
+
+
+

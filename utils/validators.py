@@ -30,6 +30,62 @@ def validate_name(name: str) -> Tuple[bool, str]:
     return True, ""
 
 
+def validate_phone_number(phone: str) -> Tuple[bool, str]:
+    """
+    Validate phone number (Ethiopian and international formats).
+    
+    Accepted formats:
+    - +251XXXXXXXXX (Ethiopian international)
+    - 09XXXXXXXX (Ethiopian local)
+    - +XXXXXXXXXXX (Other international)
+    
+    Returns:
+        (is_valid, error_message)
+    """
+    # Remove spaces, dashes, and parentheses
+    cleaned = re.sub(r'[\s\-\(\)]', '', phone)
+    
+    if not cleaned:
+        return False, "Phone number cannot be empty."
+    
+    # Ethiopian format: +251 or 09
+    if cleaned.startswith('+251'):
+        if len(cleaned) != 13 or not cleaned[1:].isdigit():
+            return False, "Ethiopian number must be +251XXXXXXXXX (13 digits total)."
+        return True, ""
+    
+    if cleaned.startswith('09'):
+        if len(cleaned) != 10 or not cleaned.isdigit():
+            return False, "Ethiopian number must be 09XXXXXXXX (10 digits)."
+        return True, ""
+    
+    if cleaned.startswith('07'):
+        if len(cleaned) != 10 or not cleaned.isdigit():
+            return False, "Ethiopian number must be 07XXXXXXXX (10 digits)."
+        return True, ""
+    
+    # International format: +XX...
+    if cleaned.startswith('+'):
+        if len(cleaned) < 10 or len(cleaned) > 15 or not cleaned[1:].isdigit():
+            return False, "International number must be +XXXXXXXXXX (10-15 digits)."
+        return True, ""
+    
+    return False, "Please enter a valid phone number.\nExamples: +251912345678 or 0912345678"
+
+
+def normalize_phone_number(phone: str) -> str:
+    """
+    Normalize phone number to international format.
+    Converts 09XX to +251 9XX format.
+    """
+    cleaned = re.sub(r'[\s\-\(\)]', '', phone)
+    
+    if cleaned.startswith('09') or cleaned.startswith('07'):
+        return '+251' + cleaned[1:]
+    
+    return cleaned
+
+
 def validate_rating(rating: int) -> Tuple[bool, str]:
     """
     Validate ride rating.

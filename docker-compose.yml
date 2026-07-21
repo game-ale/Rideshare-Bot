@@ -1,0 +1,34 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rideshare-backend
+    ports:
+      - "8001:8001"
+    volumes:
+      # Mount the database file so it persists across container restarts
+      - ./rideshare.db:/app/rideshare.db
+    env_file:
+      - .env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/admin/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  frontend:
+    build:
+      context: ./dashboard
+      dockerfile: Dockerfile
+    container_name: rideshare-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      # The frontend container needs to know how to talk to the backend container internally or via localhost
+      - NEXT_PUBLIC_API_URL=http://localhost:8001/admin
+    depends_on:
+      - backend
+    restart: unless-stopped
